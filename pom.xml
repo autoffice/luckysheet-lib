@@ -150,25 +150,6 @@
         </dependency>
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>mvn-repo</id>
-            <name>mvn-repo</name>
-            <url>https://depend.iflytek.com/artifactory/mvn-repo/</url>
-            <layout>default</layout>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>my-plugin-repo</id>
-            <url>https://depend.iflytek.com/artifactory/mvn-repo/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-    </pluginRepositories>
-
     <build>
         <pluginManagement>
             <plugins>
