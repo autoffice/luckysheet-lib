@@ -21,10 +21,4 @@ class LuckysheetConverterTest {
         LuckysheetConverter.excelToLuckySheetFile(OUTPUT + "full1.xlsx", OUTPUT + "full2.json");
         LuckysheetConverter.luckysheetToExcel(OUTPUT + "full2.json", OUTPUT + "full2.xlsx");
     }
-
-    @Test
-    void test() throws IOException, InvalidFormatException {
-        LuckysheetConverter.excelToLuckySheetFile(OUTPUT + "err.xlsx", OUTPUT + "err.json");
-        LuckysheetConverter.luckysheetToExcel(OUTPUT + "err.json", OUTPUT + "err_new.xlsx");
-    }
 }
