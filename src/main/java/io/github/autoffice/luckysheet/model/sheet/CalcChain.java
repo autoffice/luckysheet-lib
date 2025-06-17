@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#calcchain"></>
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#calcchain">luckysheet官方文档</a>
  */
 @Data
 public class CalcChain {

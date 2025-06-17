@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 单元格边框. {@link BorderRangeType#CELL}
  *
- * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%AB%E8%BE%B9%E6%A1%86%E5%8D%95%E5%85%83%E6%A0%BC" />
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%AB%E8%BE%B9%E6%A1%86%E5%8D%95%E5%85%83%E6%A0%BC">luckysheet官方文档</a>
  */
 @Data
 public class Border {

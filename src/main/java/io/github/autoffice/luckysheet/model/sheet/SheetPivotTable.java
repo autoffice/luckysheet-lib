@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * 数据透视表设置
- * <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#pivottable"></>
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#pivottable">luckysheet官方文档</a>
  */
 @Data
 public class SheetPivotTable {

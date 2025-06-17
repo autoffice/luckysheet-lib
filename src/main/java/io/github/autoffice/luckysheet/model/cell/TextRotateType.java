@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 字体旋转类型,<b>参考微软excel中 开始->对齐方式->方向</b>
+ * 字体旋转类型,<b>参考微软excel中 开始-对齐方式-方向</b>
  */
 @AllArgsConstructor
 public enum TextRotateType {

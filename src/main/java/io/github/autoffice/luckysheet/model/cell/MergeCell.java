@@ -7,14 +7,13 @@ import lombok.Data;
  * <p>
  * +-----------------+       +----------------+
  * |(0,0)   |(0,1)   |       |                |
- * +-----------------+ +---> |                |
+ * +-----------------+ +--- |                |
  * |(1,0)   |(1,1)   |       |                |
  * +-----------------+       +----------------+
  * <p>
- * 如上4个单元格合并后: startRow=0,startCol=0,rowsNum=2,colsNum=2
+ * luckysheet合并单元格，如上4个单元格合并后: startRow=0,startCol=0,rowsNum=2,colsNum=2
  * <p>
- * href="<a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%88%E5%B9%B6%E5%8D%95%E5%85%83%E6%A0%BC">...</a>">
- * luckysheet合并单元格 </a>
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%88%E5%B9%B6%E5%8D%95%E5%85%83%E6%A0%BC">luckysheet官方文档</a>
  */
 @Data
 public class MergeCell {
