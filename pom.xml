@@ -26,14 +26,14 @@
     </scm>
 
     <organization>
-        <name>Autoffice Group</name>
+        <name>AutOffice</name>
     </organization>
 
     <developers>
         <developer>
             <id>HelloAldis</id>
             <name>HelloAldis</name>
-            <email>307665930@qq.com</email>
+            <email>hello.aldis@qq.com</email>
         </developer>
     </developers>
 
@@ -151,16 +151,6 @@
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.13</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <!-- code style -->
             <plugin>
@@ -170,6 +160,7 @@
                 <configuration>
                     <printFailingErrors>true</printFailingErrors>
                     <verbose>true</verbose>
+                    <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
@@ -281,6 +272,33 @@
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>4.6</version>
+                <configuration>
+                    <licenseSets>
+                        <licenseSet>
+                            <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                            <includes>
+                                <include>**/*.java</include>
+                            </includes>
+                        </licenseSet>
+                    </licenseSets>
+                    <properties>
+                        <owner>AutOffice</owner>
+                        <email>hello.aldis@qq.com</email>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
