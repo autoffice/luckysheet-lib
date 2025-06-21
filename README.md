@@ -6,6 +6,16 @@ luckysheet-lib
 luckysheet-lib是Luckysheet的Java库，包括excel导入luckysheet和luckysheet导出为xlsx格式的excel文件。
 
 ## 使用方法
+pom.xml引入luckysheet-lib依赖
+```xml
+            <dependency>
+                <groupId>io.github.autoffice</groupId>
+                <artifactId>luckysheet-lib</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+```
+
+使用`LuckysheetConverter`类中对应的导入、导出方法即可，例如：
 ```java
 import io.github.autoffice.luckysheet.LuckysheetConverter;
 
