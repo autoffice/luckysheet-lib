@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.helloaldis.autoffice</groupId>
+    <groupId>io.github.autoffice</groupId>
     <artifactId>luckysheet-lib</artifactId>
     <packaging>jar</packaging>
     <version>${revision}</version>
     <name>luckysheet-lib</name>
-    <description>Luckysheet的Java库，包括excel导入和导出等。The Java library for Luckysheet, including Excel import export and more.</description>
+    <description>Luckysheet的Java工具库，包括excel导入和导出等功能。The Java library for Luckysheet, including Excel import export and more.</description>
     <url>https://github.com/autoffice/luckysheet-lib</url>
     <inceptionYear>2025</inceptionYear>
 
@@ -45,17 +45,6 @@
             <comments>A business-friendly OSS license</comments>
         </license>
     </licenses>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -201,7 +190,7 @@
                     <execution>
                         <phase>compile</phase>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -274,9 +263,10 @@
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.7.0</version>
+                <version>0.8.0</version>
                 <extensions>true</extensions>
                 <configuration>
+                    <publishingServerId>ossrh</publishingServerId>
                     <autoPublish>true</autoPublish>
                     <waitUntil>published</waitUntil>
                 </configuration>
