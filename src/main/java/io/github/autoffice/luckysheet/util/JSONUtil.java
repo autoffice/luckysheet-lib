@@ -18,10 +18,13 @@ package io.github.autoffice.luckysheet.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.io.File;
 
-public class JSONUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class JSONUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     static {

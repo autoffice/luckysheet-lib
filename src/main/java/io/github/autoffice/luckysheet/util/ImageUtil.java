@@ -16,6 +16,8 @@
 package io.github.autoffice.luckysheet.util;
 
 import io.github.autoffice.luckysheet.model.image.SheetImage;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +29,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public class ImageUtil {
+public final class ImageUtil {
     public static String toLuckySheetImage(byte[] data) {
         byte[] png = toPng(data);
         if (png == null) {

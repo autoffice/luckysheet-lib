@@ -15,7 +15,11 @@
  */
 package io.github.autoffice.luckysheet.util;
 
-public class Util {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Util {
     public static <T> T requireNonNullElse(T obj, T defaultObj) {
         return obj != null ? obj : defaultObj;
     }

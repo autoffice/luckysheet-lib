@@ -15,10 +15,14 @@
  */
 package io.github.autoffice.luckysheet.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
-public class DateUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DateUtil {
     public static String toJsonTimeString(long millis) {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(millis));
     }

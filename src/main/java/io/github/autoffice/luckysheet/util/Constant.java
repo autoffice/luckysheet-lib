@@ -15,6 +15,10 @@
  */
 package io.github.autoffice.luckysheet.util;
 
-public class Constant {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Constant {
     public static final String FA_GENERAL = "General";
 }

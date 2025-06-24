@@ -15,12 +15,14 @@
  */
 package io.github.autoffice.luckysheet.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.util.Units;
 
-
-public class NumberUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class NumberUtil {
     public static byte[] colorStringToRgb(String str) {
         byte[] rgb = new byte[]{0, 0, 0};
         if (StringUtils.isEmpty(str)) {

@@ -15,10 +15,13 @@
  */
 package io.github.autoffice.luckysheet.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-public class PoiUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PoiUtil {
     public static int getFirstRowBase0(Sheet sheet) {
         int firstRowNum = sheet.getFirstRowNum();
         return Math.max(firstRowNum, 0);
