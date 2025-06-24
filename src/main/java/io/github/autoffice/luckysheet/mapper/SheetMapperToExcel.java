@@ -21,7 +21,6 @@ import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
 import io.github.autoffice.luckysheet.model.sheet.Border;
 import io.github.autoffice.luckysheet.model.sheet.BorderRangeType;
 import io.github.autoffice.luckysheet.model.sheet.BorderStyleType;
-import io.github.autoffice.luckysheet.model.sheet.BorderType;
 import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import io.github.autoffice.luckysheet.model.sheet.Range;
 import io.github.autoffice.luckysheet.util.NumberUtil;
@@ -98,15 +97,7 @@ public class SheetMapperToExcel {
 
     private static List<Border> mapRangeBorderToCellBorder(Border border) {
         List<Border> borders = new ArrayList<>();
-        if (border.getStyle() == BorderStyleType.NONE) {
-            return borders;
-        }
-
         if (CollectionUtils.isEmpty(border.getRange())) {
-            return borders;
-        }
-
-        if (border.getBorderType() == BorderType.NONE) {
             return borders;
         }
 
@@ -251,6 +242,20 @@ public class SheetMapperToExcel {
                             if (LuckySheetFactory.hasBorderStyle(borderTmp)) {
                                 borders.add(borderTmp);
                             }
+                        }
+                    }
+                    break;
+                }
+                case NONE: {
+                    for (int row = rowTop; row <= rowBottom; row++) {
+                        for (int col = colLeft; col <= colRight; col++) {
+                            Border borderTmp = LuckySheetFactory.createBorder(row, col);
+                            borderStyle.setStyle(BorderStyleType.NONE);
+                            borderTmp.getValue().setL(borderStyle);
+                            borderTmp.getValue().setR(borderStyle);
+                            borderTmp.getValue().setT(borderStyle);
+                            borderTmp.getValue().setB(borderStyle);
+                            borders.add(borderTmp);
                         }
                     }
                     break;
