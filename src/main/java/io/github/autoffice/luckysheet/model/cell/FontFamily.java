@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
  * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%9F%BA%E6%9C%AC%E5%8D%95%E5%85%83%E6%A0%BC">
  * 基本单元格 ff</a>
  */
+@Getter
 @AllArgsConstructor
 public enum FontFamily {
     /**
@@ -90,19 +91,22 @@ public enum FontFamily {
     @JsonValue
     private final Integer lsValue;
 
-    @Getter
     private final String poiValue;
 
-    private static final Map<String, FontFamily> NAMES = Arrays.stream(values())
+    private static final Map<String, FontFamily> NAMES_OR_IDS = Arrays.stream(values())
             .collect(Collectors.toMap(FontFamily::getPoiValue, Function.identity()));
+    static {
+        NAMES_OR_IDS.putAll(Arrays.stream(values())
+            .collect(Collectors.toMap(e -> String.valueOf(e.getLsValue()), Function.identity())));
+    }
 
     /**
-     * @param name 字体名
+     * @param nameOrId poi字体名或lcukysheet字体id
      * @return 如果无对应字体, 默认返回 {@link FontFamily#ARIAL}
      */
     @JsonCreator
-    public static FontFamily of(String name) {
-        FontFamily fontFamily = NAMES.get(name);
+    public static FontFamily of(String nameOrId) {
+        FontFamily fontFamily = NAMES_OR_IDS.get(nameOrId);
         if (Objects.isNull(fontFamily)) {
             return ARIAL;
         }
