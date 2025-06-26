@@ -145,7 +145,7 @@ public class CellMapperToLuckySheet {
         cellData.getV().setFs(font.getFontHeightInPoints());
 
         if (font.getXSSFColor() != null) {
-            cellData.getV().setFc(NumberUtil.rgbToColorString(font.getXSSFColor().getRGB()));
+            cellData.getV().setFc(NumberUtil.rgbToColorString(font.getXSSFColor().getRGBWithTint()));
         }
     }
 
@@ -223,7 +223,7 @@ public class CellMapperToLuckySheet {
                 inlineText.setFs(font.getFontHeightInPoints());
 
                 if (font.getXSSFColor() != null) {
-                    inlineText.setFc(NumberUtil.rgbToColorString(font.getXSSFColor().getRGB()));
+                    inlineText.setFc(NumberUtil.rgbToColorString(font.getXSSFColor().getRGBWithTint()));
                 }
             }
 
