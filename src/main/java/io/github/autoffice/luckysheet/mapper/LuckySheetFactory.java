@@ -79,7 +79,12 @@ public class LuckySheetFactory {
         }
 
         Border.Style style = new Border.Style();
-        style.setColor(NumberUtil.rgbToColorString(borderColor.getRGB()));
+        if (borderColor.isAuto()) {
+            style.setColor("rgb(0,0,0)");
+        } else {
+            style.setColor(NumberUtil.rgbToColorString(borderColor.getRGBWithTint()));
+        }
+
         style.setStyle(BorderStyleType.of(borderStyle));
         return style;
     }
