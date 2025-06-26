@@ -74,7 +74,7 @@ public class CellValue {
      * 理论上来说,设定好{@link CellValue#ct}后,此处为string不影响显示
      * <p>
      */
-    private Object v;
+    private String v;
 
     /**
      * 单元格值格式：文本、时间等

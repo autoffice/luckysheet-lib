@@ -32,6 +32,7 @@ import io.github.autoffice.luckysheet.util.Constant;
 import io.github.autoffice.luckysheet.util.NumberUtil;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -44,6 +45,8 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.github.autoffice.luckysheet.util.DateUtil.DATE_MAP;
 
 public class CellMapperToLuckySheet {
 
@@ -75,12 +78,12 @@ public class CellMapperToLuckySheet {
             return;
         }
 
+        mapDataFormat(cellStyle, cellData);
         mapBackgroundColor(cellStyle, cellData);
         mapFont(cellStyle, cellData);
         mapHorizontalAlignment(cellStyle, cellData);
         mapVerticalAlignment(cellStyle, cellData);
         mapRotation(cellStyle, cellData);
-        mapDataFormat(cellStyle, cellData);
         mapWrapText(cellStyle, cellData);
     }
 
@@ -95,7 +98,12 @@ public class CellMapperToLuckySheet {
     private static void mapDataFormat(XSSFCellStyle cellStyle, CellData cellData) {
         String dataFormatString = cellStyle.getDataFormatString();
         if (dataFormatString == null) {
-            return;
+            if (DATE_MAP.get(cellStyle.getDataFormat()) != null) {
+                dataFormatString = DATE_MAP.get(cellStyle.getDataFormat());
+                cellData.getV().getCt().setT(CellTypeEnum.DATETIME);
+            } else {
+                return;
+            }
         }
 
         cellData.getV().getCt().setFa(dataFormatString);
@@ -164,19 +172,32 @@ public class CellMapperToLuckySheet {
             } else {
                 cellData.getV().setV(cell.getStringCellValue());
                 cellData.getV().setM(dataFormatter.formatCellValue(cell));
+                cellData.getV().getCt().setFa(Constant.FA_GENERAL);
+                cellData.getV().getCt().setT(CellTypeEnum.STRING);
             }
         } else if (cellType == CellType.FORMULA) {
             cellData.getV().setF(cell.getCellFormula());
             cellData.getV().setM(dataFormatter.formatCellValue(cell));
+            cellData.getV().getCt().setFa(Constant.FA_GENERAL);
+            cellData.getV().getCt().setT(CellTypeEnum.GENERAL);
         } else if (cellType == CellType.NUMERIC) {
-            cellData.getV().setV(cell.getNumericCellValue());
-            cellData.getV().setM(dataFormatter.formatCellValue(cell));
+            if (DateUtil.isCellDateFormatted(cell)) {
+                cellData.getV().setV(String.valueOf(cell.getNumericCellValue()));
+                cellData.getV().setM(dataFormatter.formatCellValue(cell));
+                cellData.getV().getCt().setT(CellTypeEnum.DATETIME);
+            } else {
+                cellData.getV().setV(String.valueOf(cell.getNumericCellValue()));
+                cellData.getV().setM(dataFormatter.formatCellValue(cell));
+                cellData.getV().getCt().setT(CellTypeEnum.NUMBER);
+            }
         } else if (cellType == CellType.BOOLEAN) {
-            cellData.getV().setV(cell.getBooleanCellValue());
+            cellData.getV().setV(String.valueOf(cell.getNumericCellValue()));
             cellData.getV().setM(dataFormatter.formatCellValue(cell));
+            cellData.getV().getCt().setT(CellTypeEnum.B);
         } else if (cellType == CellType.ERROR) {
             cellData.getV().setV(cell.getErrorCellString());
             cellData.getV().setM(dataFormatter.formatCellValue(cell));
+            cellData.getV().getCt().setT(CellTypeEnum.E);
         }
     }
 

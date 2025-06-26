@@ -35,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.BuiltinFormats;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -42,6 +44,7 @@ import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -87,27 +90,52 @@ public class CellMapperToExcel {
     }
 
     private static void mapCellValue(CellData cellData, XSSFCell cell) {
+        if (cellData.getV() == null) {
+            return;
+        }
+
+        if (cellData.getV().getCt() == null) {
+            return;
+        }
+        CellTypeEnum cellTypeEnum = cellData.getV().getCt().getT();
+
+        if (cellTypeEnum == CellTypeEnum.INLINESTR) {
+            mapRichTextString(cellData.getV().getCt().getS(), cell);
+        }
+
         if (cellData.getV().getV() == null) {
-            if (cellData.getV().getCt() != null &&
-                    cellData.getV().getCt().getT() == CellTypeEnum.INLINESTR) {
-                mapRichTextString(cellData.getV().getCt().getS(), cell);
+            return;
+        }
+
+        if (cellTypeEnum == null) {
+            if (cellData.getV().getM() != null) {
+                cell.setCellValue(cellData.getV().getM() );
+            } else {
+                cell.setCellValue(cellData.getV().getV());
             }
             return;
         }
 
-        if (cellData.getV().getV() instanceof Boolean) {
-            cell.setCellValue((Boolean) cellData.getV().getV());
-        } else if (cellData.getV().getV() instanceof Integer) {
-            if (cellData.getV().getCt() != null && cellData.getV().getCt().getT() != null && cellData.getV().getCt().getT() == CellTypeEnum.DATETIME) {
-                // 日期格式数据使用monitor值
-                cell.setCellValue(cellData.getV().getM());
-            } else {
-                cell.setCellValue(Double.valueOf((Integer) cellData.getV().getV()));
-            }
-        } else if (cellData.getV().getV() instanceof Double) {
-            cell.setCellValue((Double) cellData.getV().getV());
-        } else if (cellData.getV().getV() instanceof String) {
-            cell.setCellValue((String) cellData.getV().getV());
+        switch (cellTypeEnum) {
+            case NUMBER:
+                cell.setCellValue(Double.parseDouble(cellData.getV().getV()));
+                break;
+            case DATETIME:
+                Date date = DateUtil.getJavaDate(Double.parseDouble(cellData.getV().getV()));
+                cell.setCellValue(date);
+                break;
+            case B:
+                cell.setCellValue(Boolean.parseBoolean(cellData.getV().getV()));
+                break;
+            case STRING:
+                cell.setCellValue(cellData.getV().getV());
+                break;
+            default:
+                if (cellData.getV().getM() != null) {
+                    cell.setCellValue(cellData.getV().getM() );
+                } else {
+                    cell.setCellValue(cellData.getV().getV());
+                }
         }
     }
 
@@ -137,6 +165,8 @@ public class CellMapperToExcel {
     private static void mapCellStyle(CellData cellData, XSSFCell cell) {
         XSSFCellStyle xssfCellStyle = PoiFactory.createCellStyle(cell);
 
+        mapDataFormat(cellData, cell, xssfCellStyle);
+
         mapBackgroundColor(cellData.getV().getBg(), xssfCellStyle);
         mapFont(cellData.getV(), cell, xssfCellStyle);
         mapHorizontalAlignment(cellData.getV().getHt(), xssfCellStyle);
@@ -146,6 +176,13 @@ public class CellMapperToExcel {
         mapWrapText(cellData.getV().getTb(), xssfCellStyle);
 
         cell.setCellStyle(xssfCellStyle);
+    }
+
+    private static void mapDataFormat(CellData cellData, XSSFCell cell, XSSFCellStyle xssfCellStyle) {
+        if (cellData.getV() != null && cellData.getV().getCt() != null && cellData.getV().getCt().getFa() != null) {
+            DataFormat dataFormat = PoiFactory.createDataFormat(cell);
+            xssfCellStyle.setDataFormat(dataFormat.getFormat(cellData.getV().getCt().getFa()));
+        }
     }
 
     private static void mapWrapText(TextBreakType tb, XSSFCellStyle xssfCellStyle) {

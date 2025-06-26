@@ -20,9 +20,18 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
+
+    // excel date format 转到 luckysheet date format
+    public static final HashMap<Short, String> DATE_MAP = new HashMap<Short, String>() {
+        {
+            put((short) 58, "M\"月\"d\"日\"");
+        }
+    };
+
     public static String toJsonTimeString(long millis) {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(millis));
     }

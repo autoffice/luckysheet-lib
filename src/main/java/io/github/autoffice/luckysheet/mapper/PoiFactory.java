@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
@@ -77,6 +78,10 @@ public class PoiFactory {
 
     public static XSSFCellStyle createCellStyle(Cell cell) {
         return (XSSFCellStyle) cell.getSheet().getWorkbook().createCellStyle();
+    }
+
+    public static DataFormat createDataFormat(Cell cell) {
+        return cell.getSheet().getWorkbook().createDataFormat();
     }
 
     public static XSSFFont createFont(Cell cell) {
