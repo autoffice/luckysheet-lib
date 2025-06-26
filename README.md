@@ -14,7 +14,7 @@ pom.xml引入luckysheet-lib依赖
             <dependency>
                 <groupId>io.github.autoffice</groupId>
                 <artifactId>luckysheet-lib</artifactId>
-                <version>1.0.0</version>
+                <version>1.0.1</version>
             </dependency>
 ```
 
