@@ -36,6 +36,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.distribution }}
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
       - name: Cache local Maven repository
         uses: actions/cache@main
         with:
@@ -58,5 +62,7 @@ jobs:
           slug: autoffice/luckysheet-lib
       - name: Maven Build
         run: ./mvnw install -B -V
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
       - name: Java Doc
         run: ./mvnw javadoc:javadoc

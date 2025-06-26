@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -34,6 +36,14 @@ class LuckysheetConverterTest {
         LuckysheetConverter.excelToLuckySheetFile(OUTPUT + "full.xlsx", OUTPUT + "full1.json");
         LuckysheetConverter.luckysheetToExcel(OUTPUT + "full1.json", OUTPUT + "full1.xlsx");
         LuckysheetConverter.excelToLuckySheetFile(OUTPUT + "full1.xlsx", OUTPUT + "full2.json");
-        LuckysheetConverter.luckysheetToExcel(OUTPUT + "full2.json", OUTPUT + "full2.xlsx");
+        LuckysheetConverter.luckysheetToExcel(OUTPUT + "full2.json", Files.newOutputStream(Paths.get(OUTPUT + "full2.xlsx")));
+    }
+
+    @Test
+    void testXlsxToLuckysheet() throws IOException, InvalidFormatException {
+        URL resource = getClass().getResource("/test.xlsx");
+        assertNotNull(resource, "Resource not found");
+        LuckysheetConverter.excelToLuckySheetFile(resource.getPath(), OUTPUT + "test.json");
+        LuckysheetConverter.luckysheetToExcel(OUTPUT + "test.json", OUTPUT + "test.xlsx");
     }
 }
