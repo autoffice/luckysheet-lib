@@ -155,7 +155,7 @@ public class CellMapperToLuckySheet {
             return;
         }
 
-        cellData.getV().setBg(NumberUtil.rgbToColorString(fillForegroundXSSFColor.getRGB()));
+        cellData.getV().setBg(NumberUtil.rgbToColorString(fillForegroundXSSFColor.getRGBWithTint()));
     }
 
     private static void mapCellValue(XSSFCell cell, CellData cellData) {
