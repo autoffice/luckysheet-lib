@@ -21,6 +21,7 @@ import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
 import io.github.autoffice.luckysheet.model.sheet.Border;
 import io.github.autoffice.luckysheet.model.sheet.BorderRangeType;
 import io.github.autoffice.luckysheet.model.sheet.BorderStyleType;
+import io.github.autoffice.luckysheet.model.sheet.Frozen;
 import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import io.github.autoffice.luckysheet.model.sheet.Range;
 import io.github.autoffice.luckysheet.util.NumberUtil;
@@ -62,8 +63,41 @@ public class SheetMapperToExcel {
         mapColumnHidden(luckySheet.getConfig().getColhidden(), sheet);
         mapBorder(luckySheet.getConfig().getBorderInfo(), sheet);
         mapGridLines(luckySheet.getShowGridLines(), sheet);
+        mapFrozen(luckySheet.getFrozen(), sheet);
 
         ImageMapperToExcel.mapToSheet(luckySheet.getImages(), sheet);
+    }
+
+    private static void mapFrozen(Frozen frozen, XSSFSheet sheet) {
+        if (frozen == null) {
+            return;
+        }
+
+        switch (frozen.getType()) {
+            case ROW:
+                sheet.createFreezePane(0, 1);
+                break;
+            case COLUMN:
+                sheet.createFreezePane(1, 0);
+                break;
+            case BOTH:
+                sheet.createFreezePane(1, 1);
+                break;
+            case RANGE_ROW:
+                sheet.createFreezePane(0, frozen.getRange().getRow_focus());
+                break;
+            case RANGE_COLUMN:
+                sheet.createFreezePane(frozen.getRange().getColumn_focus(), 0);
+                break;
+            case RANGE_BOTH:
+                sheet.createFreezePane(frozen.getRange().getColumn_focus(), frozen.getRange().getRow_focus());
+                break;
+            case CANCEL:
+                sheet.createFreezePane(0, 0);
+                break;
+            default:
+                break;
+        }
     }
 
     private static void mapGridLines(BoolStatus showGridLines, XSSFSheet sheet) {

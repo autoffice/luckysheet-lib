@@ -19,10 +19,13 @@ import io.github.autoffice.luckysheet.model.cell.CellData;
 import io.github.autoffice.luckysheet.model.cell.MergeCell;
 import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
 import io.github.autoffice.luckysheet.model.sheet.Border;
+import io.github.autoffice.luckysheet.model.sheet.Frozen;
+import io.github.autoffice.luckysheet.model.sheet.FrozenType;
 import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import io.github.autoffice.luckysheet.util.NumberUtil;
 import io.github.autoffice.luckysheet.util.PoiUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.PaneInformation;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -65,8 +68,42 @@ public class SheetMapperToLuckySheet {
         mapRowHeightAndHidden(sheet, luckySheet);
         mapColumnWithAndHidden(sheet, luckySheet);
         mapGridLines(sheet, luckySheet);
+        mapFrozen(sheet, luckySheet);
 
         ImageMapperToLuckySheet.mapToSheet(sheet, luckySheet);
+    }
+
+    private static void mapFrozen(XSSFSheet sheet, LuckySheet luckySheet) {
+        PaneInformation paneInformation = sheet.getPaneInformation();
+        if (paneInformation == null || !paneInformation.isFreezePane()) {
+            return;
+        }
+
+        short topRow = paneInformation.getHorizontalSplitPosition();
+        short leftCol = paneInformation.getVerticalSplitPosition();
+        if (topRow == 0 && leftCol == 0) {
+            return;
+        }
+
+        Frozen frozen = LuckySheetFactory.createFrozen();
+        if (topRow == 1 && leftCol == 0) {
+            frozen.setType(FrozenType.ROW);
+        } else if (topRow == 0 && leftCol == 1) {
+            frozen.setType(FrozenType.COLUMN);
+        } else if (topRow == 1 && leftCol == 1) {
+            frozen.setType(FrozenType.BOTH);
+        } else if (topRow == 0 && leftCol > 1) {
+            frozen.setType(FrozenType.RANGE_COLUMN);
+            frozen.setRange(new Frozen.Range(topRow, leftCol));
+        } else if (topRow > 1 && leftCol == 0) {
+            frozen.setType(FrozenType.RANGE_ROW);
+            frozen.setRange(new Frozen.Range(topRow, leftCol));
+        } else if (topRow > 1 && leftCol > 1) {
+            frozen.setType(FrozenType.RANGE_BOTH);
+            frozen.setRange(new Frozen.Range(topRow, leftCol));
+        }
+
+        luckySheet.setFrozen(frozen);
     }
 
     private static void mapGridLines(XSSFSheet sheet, LuckySheet luckySheet) {

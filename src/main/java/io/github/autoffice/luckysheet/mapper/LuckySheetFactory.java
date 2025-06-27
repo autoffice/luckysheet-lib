@@ -29,6 +29,7 @@ import io.github.autoffice.luckysheet.model.image.SheetImage;
 import io.github.autoffice.luckysheet.model.sheet.Border;
 import io.github.autoffice.luckysheet.model.sheet.BorderRangeType;
 import io.github.autoffice.luckysheet.model.sheet.BorderStyleType;
+import io.github.autoffice.luckysheet.model.sheet.Frozen;
 import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import io.github.autoffice.luckysheet.util.NumberUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -119,5 +120,9 @@ public class LuckySheetFactory {
         style.setStyle(border.getStyle());
         style.setColor(border.getColor());
         return style;
+    }
+
+    public static Frozen createFrozen() {
+        return new Frozen();
     }
 }

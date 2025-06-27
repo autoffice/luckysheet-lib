@@ -183,4 +183,9 @@ public class LuckySheet {
      * 是否显示网格线. 1, 显示; 0,隐藏.
      */
     private BoolStatus showGridLines;
+
+    /**
+     * 冻结行列设置
+     */
+    private Frozen frozen;
 }
