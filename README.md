@@ -3,18 +3,21 @@ luckysheet-lib
 [![Java CI](https://github.com/autoffice/luckysheet-lib/actions/workflows/ci.yml/badge.svg)](https://github.com/autoffice/luckysheet-lib/actions/workflows/ci.yml)
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![codecov](https://codecov.io/gh/autoffice/luckysheet-lib/graph/badge.svg?token=DP021D9LUG)](https://codecov.io/gh/autoffice/luckysheet-lib)
+[![CodeQL](https://github.com/autoffice/luckysheet-lib/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/autoffice/luckysheet-lib/actions/workflows/github-code-scanning/codeql)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.autoffice/luckysheet-lib.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.autoffice/luckysheet-lib)
 
 luckysheet-lib是Luckysheet的Java库，包括excel导入luckysheet和luckysheet导出为xlsx格式的excel文件。
 
 **如果你觉的还不错，欢迎start 或者 fork**
 
 ## 使用方法
-pom.xml引入luckysheet-lib依赖
+pom.xml引入luckysheet-lib依赖, [![最新版本](https://img.shields.io/maven-central/v/io.github.autoffice/luckysheet-lib.svg?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC)](https://search.maven.org/artifact/io.github.autoffice/luckysheet-lib)
+
 ```xml
             <dependency>
                 <groupId>io.github.autoffice</groupId>
                 <artifactId>luckysheet-lib</artifactId>
-                <version>1.0.1</version>
+                <version>最新版本</version>
             </dependency>
 ```
 
