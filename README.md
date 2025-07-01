@@ -6,9 +6,9 @@ luckysheet-lib
 [![CodeQL](https://github.com/autoffice/luckysheet-lib/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/autoffice/luckysheet-lib/actions/workflows/github-code-scanning/codeql)
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.autoffice/luckysheet-lib.svg?label=Maven%20Central)](https://search.maven.org/artifact/io.github.autoffice/luckysheet-lib)
 
-luckysheet-lib是Luckysheet的Java库，包括excel导入luckysheet和luckysheet导出为xlsx格式的excel文件。
+luckysheet-lib是Luckysheet的Java库，支持包括excel xlsx导入luckysheet和luckysheet导出为xlsx excel文件。
 
-**如果你觉的还不错，欢迎start 或者 fork**
+**如果你觉的还不错，欢迎star 或者 fork**
 
 ## 使用方法
 pom.xml引入luckysheet-lib依赖, [![最新版本](https://img.shields.io/maven-central/v/io.github.autoffice/luckysheet-lib.svg?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC)](https://search.maven.org/artifact/io.github.autoffice/luckysheet-lib)
@@ -49,7 +49,10 @@ public class Test {
 ```
 
 ## 支持功能列表
-当前已经完成以下表格特性的导入（xlsx文件转为luckysheet json）和导出（luckysheet json转为xlsx文件）:
+当前已经完成以下表格特性的导入和导出支持:
+- 导入导出
+  - xlsx文件导入为luckysheet json
+  - luckysheet json下载为xlsx文件
 - sheet数据和样式
   - 多sheet
   - sheet名称
@@ -76,7 +79,7 @@ public class Test {
   - 自动换行
   - 文字旋转
 - 公式
-  -  绝大多数公式，少量公式存证luckysheet和excel兼容问题，大家有返现也可指出
+  -  绝大多数公式，少量公式存证luckysheet和excel兼容问题，大家有发现可以反馈
 - 批注
   - 批注内容
   - 批注锚点
