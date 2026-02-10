@@ -123,6 +123,12 @@ public class CellValue {
     private TextBreakType tb;
 
     /**
+     * 缩小字体填充. 0 否、1 是
+     * 当单元格内容超出单元格宽度时，自动缩小字体以适应单元格
+     */
+    private ShrinkToFit stf;
+
+    /**
      * 批注
      */
     private Comment ps;

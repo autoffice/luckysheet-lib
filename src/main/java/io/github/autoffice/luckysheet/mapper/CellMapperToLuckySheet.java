@@ -25,6 +25,7 @@ import io.github.autoffice.luckysheet.model.cell.Comment;
 import io.github.autoffice.luckysheet.model.cell.FontFamily;
 import io.github.autoffice.luckysheet.model.cell.InlineText;
 import io.github.autoffice.luckysheet.model.cell.Italic;
+import io.github.autoffice.luckysheet.model.cell.ShrinkToFit;
 import io.github.autoffice.luckysheet.model.cell.TextBreakType;
 import io.github.autoffice.luckysheet.model.cell.TextRotateType;
 import io.github.autoffice.luckysheet.model.cell.Underline;
@@ -85,6 +86,7 @@ public class CellMapperToLuckySheet {
         mapVerticalAlignment(cellStyle, cellData);
         mapRotation(cellStyle, cellData);
         mapWrapText(cellStyle, cellData);
+        mapShrinkToFit(cellStyle, cellData);
     }
 
     private static void mapWrapText(XSSFCellStyle cellStyle, CellData cellData) {
@@ -93,6 +95,10 @@ public class CellMapperToLuckySheet {
         } else {
             cellData.getV().setTb(TextBreakType.OVERFLOW);
         }
+    }
+
+    private static void mapShrinkToFit(XSSFCellStyle cellStyle, CellData cellData) {
+        cellData.getV().setStf(ShrinkToFit.of(cellStyle.getShrinkToFit()));
     }
 
     private static void mapDataFormat(XSSFCellStyle cellStyle, CellData cellData) {

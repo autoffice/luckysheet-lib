@@ -27,6 +27,7 @@ import io.github.autoffice.luckysheet.model.cell.Comment;
 import io.github.autoffice.luckysheet.model.cell.FontFamily;
 import io.github.autoffice.luckysheet.model.cell.InlineText;
 import io.github.autoffice.luckysheet.model.cell.Italic;
+import io.github.autoffice.luckysheet.model.cell.ShrinkToFit;
 import io.github.autoffice.luckysheet.model.cell.TextBreakType;
 import io.github.autoffice.luckysheet.model.cell.TextRotateType;
 import io.github.autoffice.luckysheet.model.cell.Underline;
@@ -174,6 +175,7 @@ public class CellMapperToExcel {
         mapRotation(cellData.getV().getTr(), xssfCellStyle);
         mapDataFormat(cellData.getV().getCt(), xssfCellStyle);
         mapWrapText(cellData.getV().getTb(), xssfCellStyle);
+        mapShrinkToFit(cellData.getV().getStf(), xssfCellStyle);
 
         cell.setCellStyle(xssfCellStyle);
     }
@@ -193,6 +195,14 @@ public class CellMapperToExcel {
         if (tb == TextBreakType.LINE_WRAP) {
             xssfCellStyle.setWrapText(true);
         }
+    }
+
+    private static void mapShrinkToFit(ShrinkToFit stf, XSSFCellStyle xssfCellStyle) {
+        if (stf == null) {
+            return;
+        }
+
+        xssfCellStyle.setShrinkToFit(stf.isPoiValue());
     }
 
     private static void mapDataFormat(CellType ct, XSSFCellStyle xssfCellStyle) {
