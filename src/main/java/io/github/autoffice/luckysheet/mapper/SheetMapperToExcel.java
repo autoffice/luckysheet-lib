@@ -28,6 +28,7 @@ import io.github.autoffice.luckysheet.util.NumberUtil;
 import io.github.autoffice.luckysheet.util.Util;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -64,8 +65,23 @@ public class SheetMapperToExcel {
         mapBorder(luckySheet.getConfig().getBorderInfo(), sheet);
         mapGridLines(luckySheet.getShowGridLines(), sheet);
         mapFrozen(luckySheet.getFrozen(), sheet);
+        mapTabColor(luckySheet.getColor(), sheet);
 
         ImageMapperToExcel.mapToSheet(luckySheet.getImages(), sheet);
+    }
+
+    private static void mapTabColor(String color, XSSFSheet sheet) {
+        if (StringUtils.isBlank(color)) {
+            return;
+        }
+        String rgbHex = color.replace("#", "");
+        byte[] rgbBytes = new byte[3];
+        rgbBytes[0] = (byte) Integer.parseInt(rgbHex.substring(0, 2), 16); // R
+        rgbBytes[1] = (byte) Integer.parseInt(rgbHex.substring(2, 4), 16); // G
+        rgbBytes[2] = (byte) Integer.parseInt(rgbHex.substring(4, 6), 16); // B
+        XSSFColor xssfColor = new XSSFColor(rgbBytes);
+        // 设置标签颜色
+        sheet.setTabColor(xssfColor);
     }
 
     private static void mapFrozen(Frozen frozen, XSSFSheet sheet) {
