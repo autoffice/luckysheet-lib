@@ -44,6 +44,9 @@ public class WorkbookMapperToLuckySheet {
                 XSSFSheet sheet = workbook.getSheetAt(i);
                 LuckySheet luckySheet = LuckySheetFactory.createLuckySheet(sheet.getSheetName());
                 luckySheet.setIndex(String.valueOf(i));
+                if (sheet.getTabColor() != null) {
+                    luckySheet.setColor("#" + sheet.getTabColor().getARGBHex().substring(2));
+                }
                 luckySheet.setOrder(i);
                 SheetMapperToLuckySheet.mapToSheet(sheet, luckySheet);
                 sheets.add(luckySheet);
