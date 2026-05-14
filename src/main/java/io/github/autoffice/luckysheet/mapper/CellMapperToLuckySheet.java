@@ -25,6 +25,7 @@ import io.github.autoffice.luckysheet.model.cell.Comment;
 import io.github.autoffice.luckysheet.model.cell.FontFamily;
 import io.github.autoffice.luckysheet.model.cell.InlineText;
 import io.github.autoffice.luckysheet.model.cell.Italic;
+import io.github.autoffice.luckysheet.model.cell.MergeCell;
 import io.github.autoffice.luckysheet.model.cell.ShrinkToFit;
 import io.github.autoffice.luckysheet.model.cell.TextBreakType;
 import io.github.autoffice.luckysheet.model.cell.TextRotateType;
@@ -37,12 +38,14 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FontUnderline;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFComment;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,40 @@ public class CellMapperToLuckySheet {
         mapCellValue(cell, cellData);
         mapCellStyle(cell, cellData);
         mapComment(cell, cellData);
+        //合并单元格
+        mapMc(cell, cellData);
+    }
+
+    private static void mapMc(XSSFCell cell, CellData cellData) {
+        XSSFSheet sheet = cell.getSheet();
+        int row = cell.getRowIndex();
+        int col = cell.getColumnIndex();
+
+        // 遍历所有合并区域
+        for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
+            CellRangeAddress region = sheet.getMergedRegion(i);
+
+            // 判断当前单元格是否在合并区域里
+            if (region.isInRange(row, col)) {
+                // 只有【左上角主单元格】才设置合并信息
+                if (region.getFirstRow() == row && region.getFirstColumn() == col) {
+                    MergeCell mc = new MergeCell();
+                    mc.setR(region.getFirstRow());
+                    mc.setC(region.getFirstColumn());
+                    mc.setRs(region.getLastRow() - region.getFirstRow() + 1);
+                    mc.setCs(region.getLastColumn() - region.getFirstColumn() + 1);
+
+                    cellData.getV().setMc(mc);
+                } else {
+                    // 被合并的单元格：不设置 mc
+                    cellData.getV().setMc(null);
+                }
+                return;
+            }
+        }
+
+        // 普通单元格
+        cellData.getV().setMc(null);
     }
 
     private static void mapComment(XSSFCell cell, CellData cellData) {

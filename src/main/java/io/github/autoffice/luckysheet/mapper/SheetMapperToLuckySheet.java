@@ -17,7 +17,12 @@ package io.github.autoffice.luckysheet.mapper;
 
 import io.github.autoffice.luckysheet.model.cell.CellData;
 import io.github.autoffice.luckysheet.model.cell.MergeCell;
-import io.github.autoffice.luckysheet.model.sheet.*;
+import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
+import io.github.autoffice.luckysheet.model.sheet.Border;
+import io.github.autoffice.luckysheet.model.sheet.DataVerification;
+import io.github.autoffice.luckysheet.model.sheet.Frozen;
+import io.github.autoffice.luckysheet.model.sheet.FrozenType;
+import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import io.github.autoffice.luckysheet.util.NumberUtil;
 import io.github.autoffice.luckysheet.util.PoiUtil;
 import org.apache.poi.ss.usermodel.DataValidationConstraint;
@@ -223,7 +228,7 @@ public class SheetMapperToLuckySheet {
                 setDateConditionType(verification, constraint);
                 break;
             case DataValidationConstraint.ValidationType.LIST:
-                verification.setType2("dropdown");
+                //verification.setType2("dropdown");
                 break;
             default:
                 verification.setType2("bw");
