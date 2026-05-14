@@ -17,13 +17,10 @@ package io.github.autoffice.luckysheet.mapper;
 
 import io.github.autoffice.luckysheet.model.cell.CellData;
 import io.github.autoffice.luckysheet.model.cell.MergeCell;
-import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
-import io.github.autoffice.luckysheet.model.sheet.Border;
-import io.github.autoffice.luckysheet.model.sheet.Frozen;
-import io.github.autoffice.luckysheet.model.sheet.FrozenType;
-import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
+import io.github.autoffice.luckysheet.model.sheet.*;
 import io.github.autoffice.luckysheet.util.NumberUtil;
 import io.github.autoffice.luckysheet.util.PoiUtil;
+import org.apache.poi.ss.usermodel.DataValidationConstraint;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.PaneInformation;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -69,8 +66,223 @@ public class SheetMapperToLuckySheet {
         mapColumnWithAndHidden(sheet, luckySheet);
         mapGridLines(sheet, luckySheet);
         mapFrozen(sheet, luckySheet);
+        mapDataVerification(sheet, luckySheet);
 
         ImageMapperToLuckySheet.mapToSheet(sheet, luckySheet);
+    }
+
+    private static void mapDataVerification(XSSFSheet sheet, LuckySheet luckySheet) {
+        // 获取工作表中的所有数据验证
+        List<org.apache.poi.xssf.usermodel.XSSFDataValidation> xssfDataValidations = sheet.getDataValidations();
+        if (xssfDataValidations == null || xssfDataValidations.isEmpty()) {
+            return;
+        }
+
+        // 初始化luckysheet的数据验证映射
+        if (luckySheet.getDataVerification() == null) {
+            luckySheet.setDataVerification(new java.util.HashMap<>());
+        }
+
+        // 遍历每个数据验证规则
+        for (org.apache.poi.xssf.usermodel.XSSFDataValidation dataValidation : xssfDataValidations) {
+            DataValidationConstraint constraint = dataValidation.getValidationConstraint();
+            if (constraint == null) {
+                continue; // 跳过无效的约束
+            }
+
+            // 获取数据验证应用的单元格范围
+            org.apache.poi.ss.util.CellRangeAddressList regions = dataValidation.getRegions();
+
+            // 遍历每个应用验证的单元格范围
+            for (int i = 0; i < regions.countRanges(); i++) {
+                CellRangeAddress region = regions.getCellRangeAddress(i);
+
+                // 对于每个单元格范围，创建对应的数据验证项
+                for (int row = region.getFirstRow(); row <= region.getLastRow(); row++) {
+                    for (int col = region.getFirstColumn(); col <= region.getLastColumn(); col++) {
+                        // 创建Luckysheet数据验证对象
+                        DataVerification verification = createDataVerification(dataValidation, constraint);
+                        if (verification != null) {
+                            // 使用 "row_col" 格式作为键
+                            String key = row + "_" + col;
+                            // 添加到luckysheet的数据验证映射
+                            luckySheet.getDataVerification().put(key, verification);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static DataVerification createDataVerification(org.apache.poi.xssf.usermodel.XSSFDataValidation dataValidation, DataValidationConstraint constraint) {
+        int validationType = constraint.getValidationType();
+        if (validationType == DataValidationConstraint.ValidationType.ANY) {
+            return null; // 任意值不需要验证
+        }
+
+        DataVerification verification = new DataVerification();
+
+        switch (validationType) {
+            case DataValidationConstraint.ValidationType.INTEGER:
+                verification.setType("number_integer");
+                break;
+            case DataValidationConstraint.ValidationType.DECIMAL:
+                verification.setType("number_decimal");
+                break;
+            case DataValidationConstraint.ValidationType.TEXT_LENGTH:
+                verification.setType("text_length");
+                break;
+            case DataValidationConstraint.ValidationType.LIST:
+                verification.setType("dropdown");
+                break;
+            case DataValidationConstraint.ValidationType.DATE:
+                verification.setType("date");
+                break;
+            case DataValidationConstraint.ValidationType.TIME:
+                verification.setType("time");
+                break;
+            case DataValidationConstraint.ValidationType.FORMULA:
+            default:
+                verification.setType("validity");
+                break;
+        }
+
+        setConditionType(verification, constraint);
+
+        Object[] explicitListValues = constraint.getExplicitListValues();
+        if (explicitListValues != null && explicitListValues.length > 0) {
+            // 根据Luckysheet规范，如果是下拉列表类型，需要将所有选项合并为逗号分隔的字符串
+            if ("dropdown".equals(verification.getType())) {
+                StringBuilder sb = new StringBuilder();
+                for (Object explicitListValue : explicitListValues) {
+                    if (explicitListValue != null) {
+                        if (sb.length() > 0) {
+                            sb.append(",");
+                        }
+                        sb.append(explicitListValue);
+                    }
+                }
+                if (sb.length() > 0) {
+                    verification.setValue1(sb.toString());
+                }
+            } else {
+                // 对于非下拉列表类型，按照原有逻辑处理
+                if (explicitListValues[0] != null) {
+                    verification.setValue1(explicitListValues[0]);
+                    // 根据Luckysheet规范，只有在type2为"bw"、"nb"或"type"为"checkbox"时才设置value2
+                    if (explicitListValues.length >= 2 && explicitListValues[1] != null &&
+                        ("bw".equals(verification.getType2()) || "nb".equals(verification.getType2()))) {
+                        verification.setValue2(explicitListValues[1]);
+                    }
+                }
+            }
+        } else {
+            String formula1 = constraint.getFormula1();
+            String formula2 = constraint.getFormula2();
+            if (formula1 != null) {
+                verification.setValue1(formula1);
+            }
+            // 同样根据Luckysheet规范设置value2
+            if (formula2 != null &&
+                ("bw".equals(verification.getType2()) || "nb".equals(verification.getType2()))) {
+                verification.setValue2(formula2);
+            }
+        }
+
+        // 设置prohibitInput，默认为false
+        boolean prohibitInput = !dataValidation.getEmptyCellAllowed();
+        if (prohibitInput) {
+            verification.setProhibitInput(prohibitInput);
+        }
+
+        // 设置hintShow和hintText
+        boolean hintShow = dataValidation.getShowErrorBox();
+        if (hintShow) {
+            verification.setHintShow(hintShow);
+            String errorTitle = dataValidation.getErrorBoxTitle();
+            String errorText = dataValidation.getErrorBoxText();
+            if (errorTitle != null && !errorTitle.isEmpty()) {
+                verification.setHintText(errorTitle);
+            } else if (errorText != null && !errorText.isEmpty()) {
+                verification.setHintText(errorText);
+            }
+        }
+
+        return verification;
+    }
+
+    private static void setConditionType(DataVerification verification, DataValidationConstraint constraint) {
+        int validationType = constraint.getValidationType();
+        switch (validationType) {
+            case DataValidationConstraint.ValidationType.INTEGER:
+            case DataValidationConstraint.ValidationType.DECIMAL:
+            case DataValidationConstraint.ValidationType.TEXT_LENGTH:
+                setOperatorConditionType(verification, constraint);
+                break;
+            case DataValidationConstraint.ValidationType.DATE:
+                setDateConditionType(verification, constraint);
+                break;
+            case DataValidationConstraint.ValidationType.LIST:
+                verification.setType2("dropdown");
+                break;
+            default:
+                verification.setType2("bw");
+                break;
+        }
+    }
+
+    private static void setDateConditionType(DataVerification verification, DataValidationConstraint constraint) {
+        switch (constraint.getOperator()) {
+            case DataValidationConstraint.OperatorType.BETWEEN:
+                verification.setType2("bw");
+                break;
+            case DataValidationConstraint.OperatorType.NOT_BETWEEN:
+                verification.setType2("nb");
+                break;
+            case DataValidationConstraint.OperatorType.EQUAL:
+                verification.setType2("eq");
+                break;
+            case DataValidationConstraint.OperatorType.NOT_EQUAL:
+                verification.setType2("ne");
+                break;
+            case DataValidationConstraint.OperatorType.GREATER_THAN:
+                verification.setType2("af"); // 晚于
+                break;
+            case DataValidationConstraint.OperatorType.LESS_THAN:
+                verification.setType2("bf"); // 早于
+                break;
+
+            default:
+                verification.setType2("bw");
+                break;
+        }
+    }
+
+    private static void setOperatorConditionType(DataVerification verification, DataValidationConstraint constraint) {
+        switch (constraint.getOperator()) {
+            case DataValidationConstraint.OperatorType.BETWEEN:
+                verification.setType2("bw");
+                break;
+            case DataValidationConstraint.OperatorType.NOT_BETWEEN:
+                verification.setType2("nb");
+                break;
+            case DataValidationConstraint.OperatorType.EQUAL:
+                verification.setType2("eq");
+                break;
+            case DataValidationConstraint.OperatorType.NOT_EQUAL:
+                verification.setType2("ne");
+                break;
+            case DataValidationConstraint.OperatorType.GREATER_THAN:
+                verification.setType2("gt");
+                break;
+            case DataValidationConstraint.OperatorType.LESS_THAN:
+                verification.setType2("lt");
+                break;
+
+            default:
+                verification.setType2("bw");
+                break;
+        }
     }
 
     private static void mapFrozen(XSSFSheet sheet, LuckySheet luckySheet) {

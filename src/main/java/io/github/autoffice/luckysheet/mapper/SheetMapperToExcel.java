@@ -19,6 +19,7 @@ import io.github.autoffice.luckysheet.model.cell.CellData;
 import io.github.autoffice.luckysheet.model.cell.MergeCell;
 import io.github.autoffice.luckysheet.model.sheet.BoolStatus;
 import io.github.autoffice.luckysheet.model.sheet.Border;
+import io.github.autoffice.luckysheet.model.sheet.DataVerification;
 import io.github.autoffice.luckysheet.model.sheet.BorderRangeType;
 import io.github.autoffice.luckysheet.model.sheet.BorderStyleType;
 import io.github.autoffice.luckysheet.model.sheet.Frozen;
@@ -66,6 +67,7 @@ public class SheetMapperToExcel {
         mapGridLines(luckySheet.getShowGridLines(), sheet);
         mapFrozen(luckySheet.getFrozen(), sheet);
         mapTabColor(luckySheet.getColor(), sheet);
+        mapDataVerification(luckySheet.getDataVerification(), sheet);
 
         ImageMapperToExcel.mapToSheet(luckySheet.getImages(), sheet);
     }
@@ -427,5 +429,344 @@ public class SheetMapperToExcel {
 
     private static void mapDefaultRowHeight(Short defaultRowHeight, XSSFSheet sheet) {
         sheet.setDefaultRowHeight((short) NumberUtil.pixel2Twips(Util.requireNonNullElse(defaultRowHeight, LUCKY_SHEET_DEFAULT_ROW_HEIGHT_IN_PIXEL)));
+    }
+
+    private static void mapDataVerification(Map<String, DataVerification> dataVerifications, XSSFSheet sheet) {
+        // 注意：Luckysheet的数据验证是以"行_列"格式的键存储的，例如"1_0"表示第1行第0列
+        // 这意味着每个验证都对应特定的单元格
+
+        if (dataVerifications == null || dataVerifications.isEmpty()) {
+            return;
+        }
+
+        // 遍历每个数据验证配置
+        for (Map.Entry<String, DataVerification> entry : dataVerifications.entrySet()) {
+            String key = entry.getKey();
+            DataVerification dataVerification = entry.getValue();
+
+            // 解析键以获取行列信息（格式为"row_col"）
+            String[] parts = key.split("_");
+            if (parts.length != 2) {
+                continue;
+            }
+
+            try {
+                int row = Integer.parseInt(parts[0]);
+                int col = Integer.parseInt(parts[1]);
+
+                org.apache.poi.ss.usermodel.DataValidationHelper validationHelper = sheet.getDataValidationHelper();
+
+                String cellRef = toCellRef(row, col);
+                org.apache.poi.ss.usermodel.DataValidationConstraint constraint = createConstraintFromLuckySheet(dataVerification, validationHelper, cellRef);
+
+                if (constraint != null) {
+                    // 创建指向特定单元格的数据验证
+                    org.apache.poi.ss.util.CellRangeAddressList addressList = new org.apache.poi.ss.util.CellRangeAddressList(
+                        row, row, col, col
+                    );
+
+                    // 创建POI数据验证对象
+                    org.apache.poi.ss.usermodel.DataValidation dataValidation = validationHelper.createValidation(
+                        constraint,
+                        addressList
+                    );
+
+                    // 设置数据验证的其他属性
+                    dataValidation.setEmptyCellAllowed(!dataVerification.getProhibitInput());
+                    if (dataVerification.getHintText() != null && !dataVerification.getHintText().isEmpty()) {
+                        dataValidation.createErrorBox("输入错误", dataVerification.getHintText());
+                        dataValidation.createPromptBox("提示", dataVerification.getHintText());
+                    }
+
+                    // 将数据验证添加到工作表
+                    sheet.addValidationData(dataValidation);
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid data verification key: " + key);
+            } catch (Exception e) {
+                System.err.println("Error processing data verification: " + key);
+            }
+        }
+    }
+
+    /**
+     * 根据Luckysheet的DataVerification创建POI的DataValidationConstraint
+     */
+    private static org.apache.poi.ss.usermodel.DataValidationConstraint createConstraintFromLuckySheet(
+            DataVerification dataVerification,
+            org.apache.poi.ss.usermodel.DataValidationHelper validationHelper,
+            String cellRef) {
+
+        String type = dataVerification.getType();
+        String type2 = dataVerification.getType2();
+        Object value1 = dataVerification.getValue1();
+        Object value2 = dataVerification.getValue2();
+
+        try {
+            switch (type) {
+                case "dropdown":
+                    // 下拉列表验证
+                    if (value1 instanceof String) {
+                        String[] values = ((String) value1).split(",");
+                        return validationHelper.createExplicitListConstraint(values);
+                    } else if (value1 instanceof String[]) {
+                        return validationHelper.createExplicitListConstraint((String[]) value1);
+                    }
+                    break;
+
+                case "number_integer":
+                    return createIntConstraint(validationHelper, type2, value1, value2, cellRef);
+
+                case "number_decimal":
+                    return createDecimalConstraint(validationHelper, type2, value1, value2, cellRef);
+
+                case "text_length":
+                    return createTextLengthConstraint(validationHelper, type2, value1, value2, cellRef);
+
+                case "date":
+                    return createDateConstraint(validationHelper, type2, value1, value2, cellRef);
+
+                case "number":
+                    return createDecimalConstraint(validationHelper, type2, value1, value2, cellRef);
+
+                default:
+                    // 其他类型，默认使用自定义公式验证
+                    if (value1 instanceof String) {
+                        return validationHelper.createFormulaListConstraint((String) value1);
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to create constraint: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    /**
+     * 创建整数约束
+     */
+    private static org.apache.poi.ss.usermodel.DataValidationConstraint createIntConstraint(
+            org.apache.poi.ss.usermodel.DataValidationHelper validationHelper,
+            String operator, Object value1, Object value2, String cellRef) {
+
+        int intValue1 = value1 != null ? convertToInt(value1) : 0;
+        int intValue2 = value2 != null ? convertToInt(value2) : 0;
+
+        switch (operator) {
+            case "bw": // between
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(intValue1), String.valueOf(intValue2));
+            case "nb": // not between
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_BETWEEN,
+                    String.valueOf(intValue1), String.valueOf(intValue2));
+            case "eq": // equal
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.EQUAL,
+                    String.valueOf(intValue1), null);
+            case "ne": // not equal
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_EQUAL,
+                    String.valueOf(intValue1), null);
+            case "gt": // greater than
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.GREATER_THAN,
+                    String.valueOf(intValue1), null);
+            case "lt": // less than
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.LESS_THAN,
+                    String.valueOf(intValue1), null);
+            case "gte":
+                return validationHelper.createCustomConstraint(cellRef + ">=" + intValue1);
+            case "lte":
+                return validationHelper.createCustomConstraint(cellRef + "<=" + intValue1);
+            default:
+                return validationHelper.createIntegerConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(intValue1), String.valueOf(intValue2));
+        }
+    }
+
+    /**
+     * 创建小数约束
+     */
+    private static org.apache.poi.ss.usermodel.DataValidationConstraint createDecimalConstraint(
+            org.apache.poi.ss.usermodel.DataValidationHelper validationHelper,
+            String operator, Object value1, Object value2, String cellRef) {
+
+        double decimalValue1 = value1 != null ? convertToDouble(value1) : 0.0;
+        double decimalValue2 = value2 != null ? convertToDouble(value2) : 0.0;
+
+        switch (operator) {
+            case "bw": // between
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(decimalValue1), String.valueOf(decimalValue2));
+            case "nb": // not between
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_BETWEEN,
+                    String.valueOf(decimalValue1), String.valueOf(decimalValue2));
+            case "eq": // equal
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.EQUAL,
+                    String.valueOf(decimalValue1), null);
+            case "ne": // not equal
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_EQUAL,
+                    String.valueOf(decimalValue1), null);
+            case "gt": // greater than
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.GREATER_THAN,
+                    String.valueOf(decimalValue1), null);
+            case "lt": // less than
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.LESS_THAN,
+                    String.valueOf(decimalValue1), null);
+            case "gte":
+                return validationHelper.createCustomConstraint(cellRef + ">=" + decimalValue1);
+            case "lte":
+                return validationHelper.createCustomConstraint(cellRef + "<=" + decimalValue1);
+            default:
+                return validationHelper.createDecimalConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(decimalValue1), String.valueOf(decimalValue2));
+        }
+    }
+
+    /**
+     * 创建文本长度约束
+     */
+    private static org.apache.poi.ss.usermodel.DataValidationConstraint createTextLengthConstraint(
+            org.apache.poi.ss.usermodel.DataValidationHelper validationHelper,
+            String operator, Object value1, Object value2, String cellRef) {
+
+        int lengthValue1 = value1 != null ? convertToInt(value1) : 0;
+        int lengthValue2 = value2 != null ? convertToInt(value2) : 0;
+
+        switch (operator) {
+            case "bw": // between
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(lengthValue1), String.valueOf(lengthValue2));
+            case "nb": // not between
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_BETWEEN,
+                    String.valueOf(lengthValue1), String.valueOf(lengthValue2));
+            case "eq": // equal
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.EQUAL,
+                    String.valueOf(lengthValue1), null);
+            case "ne": // not equal
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_EQUAL,
+                    String.valueOf(lengthValue1), null);
+            case "gt": // greater than
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.GREATER_THAN,
+                    String.valueOf(lengthValue1), null);
+            case "lt": // less than
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.LESS_THAN,
+                    String.valueOf(lengthValue1), null);
+            case "gte":
+                return validationHelper.createCustomConstraint(cellRef + ">=" + lengthValue1);
+            case "lte":
+                return validationHelper.createCustomConstraint(cellRef + "<=" + lengthValue1);
+            default:
+                return validationHelper.createTextLengthConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    String.valueOf(lengthValue1), String.valueOf(lengthValue2));
+        }
+    }
+
+    /**
+     * 创建日期约束
+     */
+    private static org.apache.poi.ss.usermodel.DataValidationConstraint createDateConstraint(
+            org.apache.poi.ss.usermodel.DataValidationHelper validationHelper,
+            String operator, Object value1, Object value2, String cellRef) {
+
+        // 日期值通常以字符串形式表示，例如 "2023-01-01"
+        String dateValue1 = value1 != null ? value1.toString() : "";
+        String dateValue2 = value2 != null ? value2.toString() : "";
+
+        switch (operator) {
+            case "bw": // between
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    dateValue1, dateValue2, "yyyy-MM-dd");
+            case "nb": // not between
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_BETWEEN,
+                    dateValue1, dateValue2, "yyyy-MM-dd");
+            case "eq": // equal
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.EQUAL,
+                    dateValue1, null, "yyyy-MM-dd");
+            case "ne": // not equal
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.NOT_EQUAL,
+                    dateValue1, null, "yyyy-MM-dd");
+            case "gt": // greater than
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.GREATER_THAN,
+                    dateValue1, null, "yyyy-MM-dd");
+            case "lt": // less than
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.LESS_THAN,
+                    dateValue1, null, "yyyy-MM-dd");
+            case "gte":
+                return validationHelper.createCustomConstraint(cellRef + ">=" + dateValue1);
+            case "lte":
+                return validationHelper.createCustomConstraint(cellRef + "<=" + dateValue1);
+            default:
+                return validationHelper.createDateConstraint(
+                    org.apache.poi.ss.usermodel.DataValidationConstraint.OperatorType.BETWEEN,
+                    dateValue1, dateValue2, "yyyy-MM-dd");
+        }
+    }
+
+    /**
+     * 将对象转换为整数
+     */
+    private static int convertToInt(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).intValue();
+        } else if (obj instanceof String) {
+            try {
+                return Integer.parseInt((String) obj);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 将对象转换为双精度浮点数
+     */
+    private static double convertToDouble(Object obj) {
+        if (obj instanceof Number) {
+            return ((Number) obj).doubleValue();
+        } else if (obj instanceof String) {
+            try {
+                return Double.parseDouble((String) obj);
+            } catch (NumberFormatException e) {
+                return 0.0;
+            }
+        }
+        return 0.0;
+    }
+
+    private static String toCellRef(int row, int col) {
+        StringBuilder colPart = new StringBuilder();
+        int c = col;
+        while (c >= 0) {
+            colPart.insert(0, (char) ('A' + c % 26));
+            c = c / 26 - 1;
+        }
+        return colPart.toString() + (row + 1);
     }
 }

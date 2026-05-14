@@ -34,6 +34,7 @@ public class LuckySheet {
         this.config = new SheetConfig();
         this.celldata = new ArrayList<>();
         this.images = new HashMap<>();
+        this.dataVerification = new HashMap<>();
     }
 
     /**
@@ -188,4 +189,9 @@ public class LuckySheet {
      * 冻结行列设置
      */
     private Frozen frozen;
+
+    /**
+     * 数据验证配置 - 键为 "row_col" 格式，例如 "1_0" 表示第1行第0列
+     */
+    private Map<String, DataVerification> dataVerification;
 }
