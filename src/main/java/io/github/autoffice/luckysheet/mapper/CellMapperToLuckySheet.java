@@ -83,10 +83,17 @@ public class CellMapperToLuckySheet {
 
                     cellData.getV().setMc(mc);
                 } else {
-                    // 被合并的单元格：不设置 mc
-                    cellData.getV().setMc(null);
+                    MergeCell mc = new MergeCell();
+                    mc.setR(region.getFirstRow());
+                    mc.setC(region.getFirstColumn());
+                    cellData.getV().setMc(mc);
                 }
                 return;
+            }else {
+                MergeCell mc = new MergeCell();
+                mc.setR(region.getFirstRow());
+                mc.setC(region.getFirstColumn());
+                cellData.getV().setMc(mc);
             }
         }
 

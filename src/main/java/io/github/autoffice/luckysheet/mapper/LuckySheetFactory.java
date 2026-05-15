@@ -80,10 +80,12 @@ public class LuckySheetFactory {
         }
 
         Border.Style style = new Border.Style();
-        if (borderColor.isAuto()) {
-            style.setColor("rgb(0,0,0)");
+        byte[] rgb = borderColor.getRGB();
+
+        if (rgb == null || rgb.length == 0) {
+            style.setColor("rgb(0,0,0)"); // 兜底黑色
         } else {
-            style.setColor(NumberUtil.rgbToColorString(borderColor.getRGBWithTint()));
+            style.setColor(NumberUtil.rgbToColorString(rgb));
         }
 
         style.setStyle(BorderStyleType.of(borderStyle));
