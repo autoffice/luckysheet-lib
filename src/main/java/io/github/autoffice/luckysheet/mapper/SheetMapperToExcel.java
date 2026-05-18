@@ -68,6 +68,17 @@ public class SheetMapperToExcel {
         mapTabColor(luckySheet.getColor(), sheet);
 
         ImageMapperToExcel.mapToSheet(luckySheet.getImages(), sheet);
+        HyperlinkMapper.mapToExcel(luckySheet.getHyperlink(), sheet);
+        DataVerificationMapper.mapToExcel(luckySheet.getDataVerification(), sheet);
+        ConditionFormatMapper.mapToExcel(luckySheet.getLuckysheet_conditionformat_save(), sheet);
+        FilterMapper.mapToExcel(luckySheet.getFilter_select(), luckySheet.getFilter(), sheet);
+        ProtectionMapper.mapToExcel(luckySheet.getConfig().getAuthority(), sheet);
+        GroupMapper.mapToExcel(luckySheet.getRowGroup(), luckySheet.getColGroup(), sheet);
+        ChartMapper.mapToExcel(luckySheet.getChart(), sheet);
+        if (Boolean.TRUE.equals(luckySheet.getIsPivotTable()) && luckySheet.getPivotTable() != null) {
+            PivotTableMapper.mapToExcel(luckySheet.getPivotTable(), sheet);
+        }
+        SparklineMapper.mapToExcel(luckySheet, sheet);
     }
 
     private static void mapTabColor(String color, XSSFSheet sheet) {

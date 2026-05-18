@@ -13,20 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.autoffice.luckysheet.model;
+package io.github.autoffice.luckysheet.model.sheet;
 
-import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import lombok.Data;
 
-import java.util.List;
-
+/**
+ * 行列分组(大纲)的单个分组区段.
+ *
+ * <p>Excel xlsx 中每行/列通过 outlineLevel 表达层级, 通过 collapsed 与隐藏状态
+ * 表达是否折叠. 为便于 Luckysheet 侧使用, 本模型将连续同层级的行或列打包成区段.</p>
+ */
 @Data
-public class LuckyFile {
-    private LuckyFileInfo info;
-    private List<LuckySheet> sheets;
+public class Group {
+    /**
+     * 区段起始行/列索引 (含).
+     */
+    private Integer start;
 
     /**
-     * Workbook 级命名范围 (Defined Names).
+     * 区段结束行/列索引 (含).
      */
-    private List<DefinedName> definedNames;
+    private Integer end;
+
+    /**
+     * 分组层级, 从 1 开始.
+     */
+    private Integer level;
+
+    /**
+     * 是否折叠隐藏.
+     */
+    private Boolean collapsed;
 }

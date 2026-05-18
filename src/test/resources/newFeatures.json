@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "newFeatures",
+    "creator": "luckysheet-lib",
+    "lastmodifiedby": "luckysheet-lib",
+    "createdTime": "2026-05-12T00:00:00Z",
+    "modifiedTime": "2026-05-12T00:00:00Z"
+  },
+  "definedNames": [
+    {
+      "name": "MyRange",
+      "formula": "Sheet1!$A$1:$B$5",
+      "sheetIndex": -1,
+      "hidden": false
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Sheet1",
+      "index": "0",
+      "order": 0,
+      "row": 30,
+      "column": 10,
+      "status": 1,
+      "celldata": [
+        {"r": 0, "c": 0, "v": {"v": "Header", "m": "Header", "ct": {"fa": "General", "t": "g"}}},
+        {"r": 1, "c": 0, "v": {"v": "50", "m": "50", "ct": {"fa": "General", "t": "n"}}},
+        {"r": 2, "c": 0, "v": {"v": "150", "m": "150", "ct": {"fa": "General", "t": "n"}}},
+        {"r": 3, "c": 0, "v": {"v": "80", "m": "80", "ct": {"fa": "General", "t": "n"}}},
+        {"r": 4, "c": 0, "v": {"v": "200", "m": "200", "ct": {"fa": "General", "t": "n"}}},
+        {"r": 0, "c": 1, "v": {"v": "Visit Google", "m": "Visit Google", "ct": {"fa": "General", "t": "g"}}}
+      ],
+      "hyperlink": {
+        "0_1": {
+          "linkType": "external",
+          "linkAddress": "https://www.google.com",
+          "linkTooltip": "Go to Google"
+        }
+      },
+      "dataVerification": {
+        "1_2": {
+          "type": "dropdown",
+          "type2": null,
+          "value1": "Yes,No,Maybe",
+          "value2": "",
+          "checked": false,
+          "remote": false,
+          "prohibitInput": false,
+          "hintShow": false,
+          "hintText": ""
+        },
+        "2_2": {
+          "type": "number",
+          "type2": "bw",
+          "value1": "0",
+          "value2": "100",
+          "prohibitInput": true,
+          "hintShow": true,
+          "hintText": "Please enter a number between 0 and 100"
+        }
+      },
+      "luckysheet_conditionformat_save": [
+        {
+          "type": "default",
+          "cellrange": [{"row": [1, 4], "column": [0, 0]}],
+          "format": {"textColor": "#000000", "cellColor": "#ff6666"},
+          "conditionName": "greatThan",
+          "conditionValue": ["100"]
+        },
+        {
+          "type": "colorGradation",
+          "cellrange": [{"row": [1, 4], "column": [0, 0]}],
+          "format": {
+            "leastcolor": "#FFEF9C",
+            "middlecolor": "#FCFCFF",
+            "maxcolor": "#63BE7B"
+          }
+        }
+      ],
+      "filter_select": {"row": [0, 4], "column": [0, 0]},
+      "config": {
+        "merge": {},
+        "rowlen": {},
+        "columnlen": {},
+        "authority": {
+          "sheet": 1,
+          "selectLockedCells": 1,
+          "selectunLockedCells": 1,
+          "formatCells": 0,
+          "insertRows": 0,
+          "insertColumns": 0,
+          "deleteRows": 0,
+          "deleteColumns": 0,
+          "sort": 0,
+          "filter": 1
+        }
+      },
+      "rowGroup": [
+        {"start": 5, "end": 8, "level": 1, "collapsed": false}
+      ],
+      "colGroup": [
+        {"start": 6, "end": 8, "level": 1, "collapsed": false}
+      ]
+    }
+  ]
+}

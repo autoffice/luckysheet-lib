@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.autoffice.luckysheet.model;
+package io.github.autoffice.luckysheet.model.sheet;
 
-import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import lombok.Data;
 
-import java.util.List;
-
+/**
+ * 单元格超链接设置.
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#hyperlink">luckysheet hyperlink</a>
+ */
 @Data
-public class LuckyFile {
-    private LuckyFileInfo info;
-    private List<LuckySheet> sheets;
+public class Hyperlink {
+    /**
+     * 链接类型：external 外部链接(URL/邮件), internal 内部链接(工作表引用)
+     */
+    private String linkType;
 
     /**
-     * Workbook 级命名范围 (Defined Names).
+     * 链接地址. 外部链接为URL/邮件, 内部链接为工作表单元格引用, eg: {@code Sheet2!A1}
      */
-    private List<DefinedName> definedNames;
+    private String linkAddress;
+
+    /**
+     * 鼠标悬停提示
+     */
+    private String linkTooltip;
 }

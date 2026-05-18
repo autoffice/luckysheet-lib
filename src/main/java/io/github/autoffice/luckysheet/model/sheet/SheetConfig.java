@@ -83,5 +83,5 @@ public class SheetConfig {
      * 工作表保护，可以设置当前整个工作表不允许编辑或者部分区域不可编辑，
      * 如果要申请编辑权限需要输入密码，自定义配置用户可以操作的类型等。
      */
-    private Object authority;
+    private Authority authority;
 }

@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.autoffice.luckysheet.model;
+package com.example.luckysheet;
 
-import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
-import lombok.Data;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.List;
-
-@Data
-public class LuckyFile {
-    private LuckyFileInfo info;
-    private List<LuckySheet> sheets;
-
-    /**
-     * Workbook 级命名范围 (Defined Names).
-     */
-    private List<DefinedName> definedNames;
+/**
+ * Luckysheet 示例应用启动类
+ */
+@SpringBootApplication
+public class LuckysheetApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(LuckysheetApplication.class, args);
+    }
 }

@@ -153,13 +153,6 @@ public class LuckySheet {
     private Range filter_select;
 
     /**
-     * 筛选的具体设置，跟filter_select筛选范围是互相搭配的。当你在第一个sheet页创建了
-     * 一个筛选区域，通过luckysheet.getLuckysheetfile()[0].filter也可以看到第
-     * 一个sheet的筛选配置信息。
-     */
-    private Object filter;
-
-    /**
      * 替颜色配置
      */
     private List<AlternateFormat> luckysheet_alternateformat_save;
@@ -188,4 +181,29 @@ public class LuckySheet {
      * 冻结行列设置
      */
     private Frozen frozen;
+
+    /**
+     * 超链接, key为 r + '_' + c 拼接, value 为链接信息
+     */
+    private Map<String, Hyperlink> hyperlink;
+
+    /**
+     * 数据验证, key为 r + '_' + c 拼接, value 为验证规则
+     */
+    private Map<String, DataVerification> dataVerification;
+
+    /**
+     * 自动筛选的具体设置, 跟filter_select筛选范围是互相搭配. key 为列号, value 为该列的筛选条件.
+     */
+    private Map<String, FilterColumn> filter;
+
+    /**
+     * 行分组 (大纲)
+     */
+    private List<Group> rowGroup;
+
+    /**
+     * 列分组 (大纲)
+     */
+    private List<Group> colGroup;
 }

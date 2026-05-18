@@ -15,3 +15,18 @@ antx.properties
 output/
 .flattened-pom.xml
 dependency-reduced-pom.xml
+superpowers
+
+# Example project
+example/backend/target/
+example/backend/.mvn/
+example/backend/mvnw
+example/backend/mvnw.cmd
+example/frontend/node_modules/
+example/frontend/dist/
+example/frontend/.vite/
+example/frontend/*.log
+
+# Temp files
+*.tmp
+*.temp

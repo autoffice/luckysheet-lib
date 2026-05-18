@@ -15,18 +15,35 @@
  */
 package io.github.autoffice.luckysheet.model;
 
-import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import lombok.Data;
 
-import java.util.List;
-
+/**
+ * Workbook 级命名范围 (Defined Name).
+ */
 @Data
-public class LuckyFile {
-    private LuckyFileInfo info;
-    private List<LuckySheet> sheets;
+public class DefinedName {
+    /**
+     * 名称.
+     */
+    private String name;
 
     /**
-     * Workbook 级命名范围 (Defined Names).
+     * 引用公式, eg: {@code Sheet1!$A$1:$B$5}
      */
-    private List<DefinedName> definedNames;
+    private String formula;
+
+    /**
+     * 所属 sheet 索引, -1 表示 workbook 级.
+     */
+    private Integer sheetIndex;
+
+    /**
+     * 备注.
+     */
+    private String comment;
+
+    /**
+     * 是否隐藏.
+     */
+    private Boolean hidden;
 }

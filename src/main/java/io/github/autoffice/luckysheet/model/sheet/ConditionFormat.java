@@ -18,6 +18,7 @@ package io.github.autoffice.luckysheet.model.sheet;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -38,7 +39,14 @@ public class ConditionFormat {
      */
     private List<Range> cellrange;
     /**
-     * 格式,根据不同的{@link ConditionFormat#type},实际对象类型不同
+     * 格式. 根据不同的 {@link ConditionFormat#type}, 实际内容结构不同:
+     * <ul>
+     *   <li>{@code default}: {textColor, cellColor}</li>
+     *   <li>{@code dataBar}: 字符串值, 例如 "greenGradation"</li>
+     *   <li>{@code colorGradation}: {leastcolor, middlecolor, maxcolor}</li>
+     *   <li>{@code icons}: {leasticons, midicons, maxicons}</li>
+     * </ul>
+     * 使用 {@code Object} 承载以便兼容字符串或对象两种形式.
      */
     private Object format;
     /**
@@ -57,4 +65,15 @@ public class ConditionFormat {
      * 自定义传入的条件值
      */
     private List<Object> conditionValue;
+
+    /**
+     * 数据条特有: 获取 format 的 Map 表示.
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getFormatAsMap() {
+        if (format instanceof Map) {
+            return (Map<String, Object>) format;
+        }
+        return null;
+    }
 }

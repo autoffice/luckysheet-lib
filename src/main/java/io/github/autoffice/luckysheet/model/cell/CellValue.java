@@ -138,4 +138,9 @@ public class CellValue {
      */
     private Integer qp;
     private Map<String, Object> customKey;
+
+    /**
+     * 迷你图 (sparkline) 描述.
+     */
+    private Sparkline spl;
 }

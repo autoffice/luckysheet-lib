@@ -1,0 +1,16 @@
+server:
+  port: 8181
+
+spring:
+  application:
+    name: luckysheet-example
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      enabled: true
+
+logging:
+  level:
+    com.example.luckysheet: INFO
+    io.github.autoffice.luckysheet: DEBUG

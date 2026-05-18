@@ -52,6 +52,7 @@ public class WorkbookMapperToLuckySheet {
                 sheets.add(luckySheet);
             }
             luckyFile.setSheets(sheets);
+            DefinedNameMapper.mapToLuckyFile(workbook, luckyFile);
         }
 
         return luckyFile;

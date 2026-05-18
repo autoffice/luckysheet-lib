@@ -35,6 +35,7 @@ public class WorkbookMapperToExcel {
             XSSFSheet poiSheet = PoiFactory.createSheet(workbook, luckySheet.getName());
             SheetMapperToExcel.mapToSheet(luckySheet, poiSheet);
         }
+        DefinedNameMapper.mapToExcel(luckyFile.getDefinedNames(), workbook);
 
         return workbook;
     }

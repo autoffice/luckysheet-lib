@@ -71,6 +71,15 @@ public class SheetMapperToLuckySheet {
         mapFrozen(sheet, luckySheet);
 
         ImageMapperToLuckySheet.mapToSheet(sheet, luckySheet);
+        HyperlinkMapper.mapToLuckySheet(sheet, luckySheet);
+        DataVerificationMapper.mapToLuckySheet(sheet, luckySheet);
+        ConditionFormatMapper.mapToLuckySheet(sheet, luckySheet);
+        FilterMapper.mapToLuckySheet(sheet, luckySheet);
+        ProtectionMapper.mapToLuckySheet(sheet, luckySheet);
+        GroupMapper.mapToLuckySheet(sheet, luckySheet);
+        ChartMapper.mapToLuckySheet(sheet, luckySheet);
+        PivotTableMapper.mapToLuckySheet(sheet, luckySheet);
+        SparklineMapper.mapToLuckySheet(sheet, luckySheet);
     }
 
     private static void mapFrozen(XSSFSheet sheet, LuckySheet luckySheet) {
