@@ -9,8 +9,6 @@
       "Bash",
       "WebFetch",
       "WebSearch",
-      "mcp__plugin_playwright",
-      "mcp__onemcp",
       "Skill(update-config)"
     ],
     "deny": [
@@ -24,40 +22,5 @@
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true
-  },
-  "hooks": {
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-notify 'CC Notification'"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-notify 'CC Stop'"
-          }
-        ]
-      }
-    ],
-    "StopFailure": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-notify 'CC StopFailure'"
-          }
-        ]
-      }
-    ]
   }
 }
