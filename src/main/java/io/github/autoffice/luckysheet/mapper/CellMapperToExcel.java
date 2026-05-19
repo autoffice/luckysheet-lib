@@ -86,7 +86,8 @@ public class CellMapperToExcel {
 
             cell.setCellFormula(func);
         } catch (Exception e) {
-            log.warn("func {} not supported", func, e);
+            // Luckysheet 自定义函数 (如迷你图 LINESPLINES 等) Excel 不支持, 这里仅记录提示
+            log.warn("func {} not supported: {}", func, e.getMessage());
         }
     }
 
