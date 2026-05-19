@@ -17,6 +17,7 @@ package io.github.autoffice.luckysheet.mapper;
 
 import io.github.autoffice.luckysheet.model.sheet.DataVerification;
 import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.DataValidation;
@@ -36,6 +37,7 @@ import java.util.Map;
 /**
  * 数据验证 Luckysheet ↔ POI 双向映射器.
  */
+@Slf4j
 public final class DataVerificationMapper {
 
     private DataVerificationMapper() {
@@ -82,7 +84,11 @@ public final class DataVerificationMapper {
         Map<DataVerification, CellRangeAddressList> grouped = new HashMap<>();
         for (Map.Entry<String, DataVerification> entry : verifications.entrySet()) {
             int[] rc = parseRowColKey(entry.getKey());
-            if (rc == null || entry.getValue() == null) {
+            if (rc == null) {
+                log.warn("Invalid data verification key: {}", entry.getKey());
+                continue;
+            }
+            if (entry.getValue() == null) {
                 continue;
             }
             CellRangeAddress cra = new CellRangeAddress(rc[0], rc[0], rc[1], rc[1]);
@@ -93,6 +99,7 @@ public final class DataVerificationMapper {
         for (Map.Entry<DataVerification, CellRangeAddressList> entry : grouped.entrySet()) {
             DataValidationConstraint constraint = buildConstraint(helper, entry.getKey());
             if (constraint == null) {
+                log.warn("Unsupported data verification type: {}, type2: {}", entry.getKey().getType(), entry.getKey().getType2());
                 continue;
             }
             DataValidation validation = helper.createValidation(constraint, entry.getValue());
@@ -136,15 +143,15 @@ public final class DataVerificationMapper {
             case DataValidationConstraint.ValidationType.INTEGER:
             case DataValidationConstraint.ValidationType.DECIMAL:
                 model.setType("number");
-                model.setType2(mapOperatorToLuckyType2(op));
+                model.setType2(mapOperatorToLuckyType2(op, false));
                 break;
             case DataValidationConstraint.ValidationType.TEXT_LENGTH:
                 model.setType("text_length");
-                model.setType2(mapOperatorToLuckyType2(op));
+                model.setType2(mapOperatorToLuckyType2(op, false));
                 break;
             case DataValidationConstraint.ValidationType.DATE:
                 model.setType("date");
-                model.setType2(mapOperatorToLuckyType2(op));
+                model.setType2(mapOperatorToLuckyType2(op, true));
                 break;
             case DataValidationConstraint.ValidationType.FORMULA:
                 model.setType("text_content");
@@ -238,6 +245,7 @@ public final class DataVerificationMapper {
         switch (type2) {
             case "bw":
                 return DataValidationConstraint.OperatorType.BETWEEN;
+            case "nb":
             case "nbw":
                 return DataValidationConstraint.OperatorType.NOT_BETWEEN;
             case "eq":
@@ -245,36 +253,40 @@ public final class DataVerificationMapper {
             case "ne":
                 return DataValidationConstraint.OperatorType.NOT_EQUAL;
             case "gt":
+            case "af":
                 return DataValidationConstraint.OperatorType.GREATER_THAN;
             case "lt":
+            case "bf":
                 return DataValidationConstraint.OperatorType.LESS_THAN;
             case "gte":
+            case "naf":
                 return DataValidationConstraint.OperatorType.GREATER_OR_EQUAL;
             case "lte":
+            case "nbf":
                 return DataValidationConstraint.OperatorType.LESS_OR_EQUAL;
             default:
                 return DataValidationConstraint.OperatorType.BETWEEN;
         }
     }
 
-    private static String mapOperatorToLuckyType2(int op) {
+    private static String mapOperatorToLuckyType2(int op, boolean isDate) {
         switch (op) {
             case DataValidationConstraint.OperatorType.BETWEEN:
                 return "bw";
             case DataValidationConstraint.OperatorType.NOT_BETWEEN:
-                return "nbw";
+                return "nb";
             case DataValidationConstraint.OperatorType.EQUAL:
                 return "eq";
             case DataValidationConstraint.OperatorType.NOT_EQUAL:
                 return "ne";
             case DataValidationConstraint.OperatorType.GREATER_THAN:
-                return "gt";
+                return isDate ? "af" : "gt";
             case DataValidationConstraint.OperatorType.LESS_THAN:
-                return "lt";
+                return isDate ? "bf" : "lt";
             case DataValidationConstraint.OperatorType.GREATER_OR_EQUAL:
-                return "gte";
+                return isDate ? "naf" : "gte";
             case DataValidationConstraint.OperatorType.LESS_OR_EQUAL:
-                return "lte";
+                return isDate ? "nbf" : "lte";
             default:
                 return null;
         }

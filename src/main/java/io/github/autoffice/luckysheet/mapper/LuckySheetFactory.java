@@ -83,7 +83,15 @@ public class LuckySheetFactory {
         if (borderColor.isAuto()) {
             style.setColor("rgb(0,0,0)");
         } else {
-            style.setColor(NumberUtil.rgbToColorString(borderColor.getRGBWithTint()));
+            byte[] rgb = borderColor.getRGBWithTint();
+            if (rgb == null || rgb.length == 0) {
+                rgb = borderColor.getRGB();
+            }
+            if (rgb == null || rgb.length == 0) {
+                style.setColor("rgb(0,0,0)");
+            } else {
+                style.setColor(NumberUtil.rgbToColorString(rgb));
+            }
         }
 
         style.setStyle(BorderStyleType.of(borderStyle));
