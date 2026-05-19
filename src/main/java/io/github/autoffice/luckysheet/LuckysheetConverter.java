@@ -32,6 +32,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Luckysheet 与 Excel 双向转换的公共 API 入口.
+ *
+ * <p>提供静态方法实现 Excel (xlsx) 文件与 Luckysheet JSON 格式之间的双向转换,
+ * 支持文件路径、输出流等多种输入输出方式.</p>
+ */
 @Slf4j
 public class LuckysheetConverter {
 

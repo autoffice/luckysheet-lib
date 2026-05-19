@@ -67,7 +67,9 @@ public class ConditionFormat {
     private List<Object> conditionValue;
 
     /**
-     * 数据条特有: 获取 format 的 Map 表示.
+     * 获取 format 的 Map 表示.
+     *
+     * @return format Map, 若非 Map 类型则返回 null
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getFormatAsMap() {

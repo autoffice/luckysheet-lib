@@ -20,6 +20,12 @@ import io.github.autoffice.luckysheet.model.sheet.LuckySheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * 工作簿 Luckysheet → POI 映射器.
+ *
+ * <p>负责将 {@link LuckyFile} 转换为 POI {@link XSSFWorkbook}, 包括所有工作表
+ * 以及工作簿级命名范围.</p>
+ */
 public class WorkbookMapperToExcel {
     /**
      * 将luckysheet对象转换为POI中的workbook

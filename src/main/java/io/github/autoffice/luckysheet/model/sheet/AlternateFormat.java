@@ -17,6 +17,13 @@ package io.github.autoffice.luckysheet.model.sheet;
 
 import lombok.Data;
 
+/**
+ * 交替颜色配置, 用于设置工作表中行的交替背景色.
+ *
+ * <p>对应 Luckysheet JSON 中的 luckysheet_alternateformat_save 数组元素.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#luckysheet-alternateformat-save">Luckysheet 交替颜色文档</a>
+ */
 @Data
 public class AlternateFormat {
     /**
@@ -36,6 +43,9 @@ public class AlternateFormat {
      */
     private Boolean hasRowFooter;
 
+    /**
+     * 交替颜色值, 包含页眉、页脚和两种交替行的颜色配置.
+     */
     @Data
     public static class AlternateFormatValue {
         /**
@@ -56,6 +66,9 @@ public class AlternateFormat {
         private AlternateFormatColor foot;
     }
 
+    /**
+     * 交替颜色, 包含字体颜色 (fc) 和背景颜色 (bc).
+     */
     @Data
     public static class AlternateFormatColor {
         private String fc;

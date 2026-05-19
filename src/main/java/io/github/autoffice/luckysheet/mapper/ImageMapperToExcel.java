@@ -29,9 +29,20 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.util.Map;
 
+/**
+ * 图片 Luckysheet → Excel (POI) 映射器.
+ *
+ * <p>负责将 {@link SheetImage} 中的图片数据和位置信息写入 POI 工作表.</p>
+ */
 @Slf4j
 public class ImageMapperToExcel {
 
+    /**
+     * 将 Luckysheet 图片集合写入 Excel 工作表.
+     *
+     * @param images Luckysheet 图片映射 (key 为图片 ID)
+     * @param sheet  目标 POI 工作表
+     */
     public static void mapToSheet(Map<String, SheetImage> images, XSSFSheet sheet) {
         if (MapUtils.isEmpty(images)) {
             return;

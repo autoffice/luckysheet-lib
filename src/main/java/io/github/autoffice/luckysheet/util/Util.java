@@ -18,8 +18,21 @@ package io.github.autoffice.luckysheet.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * 通用辅助工具类.
+ *
+ * <p>提供 JDK 8 中缺失的 {@code Objects.requireNonNullElse} 等便捷方法.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Util {
+    /**
+     * 若 {@code obj} 非 null 则返回它, 否则返回默认值.
+     *
+     * @param obj        待判断对象
+     * @param defaultObj 默认值
+     * @param <T>        对象类型
+     * @return obj 或 defaultObj
+     */
     public static <T> T requireNonNullElse(T obj, T defaultObj) {
         return obj != null ? obj : defaultObj;
     }

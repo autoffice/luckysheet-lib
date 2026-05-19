@@ -18,17 +18,17 @@ package io.github.autoffice.luckysheet.model.cell;
 import lombok.Data;
 
 /**
- * luckysheet中合并单元格的表示
- * <p>
+ * Luckysheet 中合并单元格的表示.
+ * <pre>
  * +-----------------+       +----------------+
  * |(0,0)   |(0,1)   |       |                |
  * +-----------------+ +--- |                |
  * |(1,0)   |(1,1)   |       |                |
  * +-----------------+       +----------------+
- * <p>
- * luckysheet合并单元格，如上4个单元格合并后: startRow=0,startCol=0,rowsNum=2,colsNum=2
- * <p>
- * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%88%E5%B9%B6%E5%8D%95%E5%85%83%E6%A0%BC">luckysheet官方文档</a>
+ * </pre>
+ * <p>如上 4 个单元格合并后: r=0, c=0, rs=2, cs=2</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html#%E5%90%88%E5%B9%B6%E5%8D%95%E5%85%83%E6%A0%BC">Luckysheet 合并单元格文档</a>
  */
 @Data
 public class MergeCell {

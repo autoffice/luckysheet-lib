@@ -18,7 +18,13 @@ package io.github.autoffice.luckysheet.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * 项目全局常量定义.
+ *
+ * <p>集中管理转换过程中使用的常量值.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Constant {
+    /** 通用数字格式标识符. */
     public static final String FA_GENERAL = "General";
 }

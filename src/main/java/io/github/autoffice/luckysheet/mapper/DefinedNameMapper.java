@@ -32,6 +32,12 @@ public final class DefinedNameMapper {
     private DefinedNameMapper() {
     }
 
+    /**
+     * 从 Excel 工作簿中提取命名范围并转换为 Luckysheet 格式.
+     *
+     * @param workbook  源 POI 工作簿
+     * @param luckyFile 目标 LuckyFile
+     */
     public static void mapToLuckyFile(XSSFWorkbook workbook, LuckyFile luckyFile) {
         List<XSSFName> names = workbook.getAllNames();
         if (names == null || names.isEmpty()) {
@@ -56,6 +62,12 @@ public final class DefinedNameMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 命名范围列表写入 Excel 工作簿.
+     *
+     * @param definedNames 命名范围列表
+     * @param workbook     目标 POI 工作簿
+     */
     public static void mapToExcel(List<DefinedName> definedNames, XSSFWorkbook workbook) {
         if (CollectionUtils.isEmpty(definedNames)) {
             return;

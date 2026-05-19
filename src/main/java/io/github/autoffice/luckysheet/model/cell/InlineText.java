@@ -17,6 +17,12 @@ package io.github.autoffice.luckysheet.model.cell;
 
 import lombok.Data;
 
+/**
+ * 富文本内联文字片段，表示单元格中一段具有独立样式的文本.
+ * <p>用于 Luckysheet 富文本单元格中的内联文本格式化.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
+ */
 @Data
 public class InlineText {
     /**

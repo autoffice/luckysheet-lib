@@ -50,6 +50,7 @@ public class SheetPivotTable {
 
     private List<Integer> pivotTableBoundary;
 
+    /** 数据透视表行/列字段配置. */
     @Data
     public static class PivotColRow {
         private Integer index;
@@ -57,6 +58,7 @@ public class SheetPivotTable {
         private String fullname;
     }
 
+    /** 数据透视表值字段配置. */
     @Data
     public static class PivotValue {
         private Integer index;

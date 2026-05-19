@@ -18,6 +18,11 @@ package io.github.autoffice.luckysheet.model.image;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
+/**
+ * 图片边框类型枚举, 定义图片边框的线型样式.
+ *
+ * <p>对应 Luckysheet 图片边框中的 style 字段, 支持实线、虚线、点状和双线.</p>
+ */
 @AllArgsConstructor
 public enum ImageBorderType {
     /**

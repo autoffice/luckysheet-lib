@@ -33,7 +33,19 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.util.List;
 
+/**
+ * 工作表 POI → Luckysheet 映射器.
+ *
+ * <p>负责将 POI {@link XSSFSheet} 中的单元格数据、行列尺寸、合并区域、边框、冻结、网格线
+ * 等信息提取到 Luckysheet 的 {@link LuckySheet} 模型中.</p>
+ */
 public class SheetMapperToLuckySheet {
+    /**
+     * 将 POI 工作表转换为 Luckysheet 工作表.
+     *
+     * @param sheet      源 Excel 工作表
+     * @param luckySheet 目标 Luckysheet 工作表 (将被原地填充)
+     */
     public static void mapToSheet(XSSFSheet sheet, LuckySheet luckySheet) {
         luckySheet.setZoomRatio(1.0);
 

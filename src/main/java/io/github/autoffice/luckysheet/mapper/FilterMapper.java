@@ -39,6 +39,12 @@ public final class FilterMapper {
     private FilterMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取自动筛选范围并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         CTWorksheet ctWorksheet = sheet.getCTWorksheet();
         if (ctWorksheet == null || !ctWorksheet.isSetAutoFilter()) {
@@ -56,6 +62,13 @@ public final class FilterMapper {
         luckySheet.setFilter_select(range);
     }
 
+    /**
+     * 将 Luckysheet 筛选范围写入 Excel 工作表.
+     *
+     * @param filterSelect 筛选范围
+     * @param filters      列筛选条件 (当前因 POI 限制仅保留范围)
+     * @param sheet        目标 POI 工作表
+     */
     public static void mapToExcel(Range filterSelect, Map<String, FilterColumn> filters, XSSFSheet sheet) {
         if (filterSelect == null || CollectionUtils.isEmpty(filterSelect.getRow())
                 || CollectionUtils.isEmpty(filterSelect.getColumn())

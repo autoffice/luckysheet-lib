@@ -18,6 +18,13 @@ package io.github.autoffice.luckysheet.model.sheet;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
+/**
+ * 冻结类型枚举, 定义工作表冻结行列的方式.
+ *
+ * <p>对应 Luckysheet frozen 配置中的 type 字段, 支持首行/首列/行列/选区冻结等模式.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#frozen">Luckysheet 冻结文档</a>
+ */
 @AllArgsConstructor
 public enum FrozenType {
     /**

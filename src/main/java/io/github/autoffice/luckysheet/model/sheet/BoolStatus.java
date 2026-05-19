@@ -19,6 +19,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 布尔状态枚举, 用于表示 Luckysheet 中 0/1 形式的开关属性.
+ *
+ * <p>对应 Luckysheet JSON 中 hide、status、showGridLines 等字段.</p>
+ */
 @AllArgsConstructor
 public enum BoolStatus {
     /**
@@ -36,6 +41,12 @@ public enum BoolStatus {
     @Getter
     private final boolean poiValue;
 
+    /**
+     * 从 POI 布尔值转换.
+     *
+     * @param poiValue POI 中的布尔值
+     * @return 对应的枚举值
+     */
     public static BoolStatus of(boolean poiValue) {
         return poiValue ? TRUE : FALSE;
     }

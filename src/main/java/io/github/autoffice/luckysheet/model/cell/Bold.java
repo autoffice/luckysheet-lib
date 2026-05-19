@@ -24,6 +24,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 单元格加粗状态.
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
+ */
 @AllArgsConstructor
 public enum Bold {
     /**
@@ -44,6 +49,12 @@ public enum Bold {
     private static final Map<Boolean, Bold> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(Bold::isPoiValue, Function.identity()));
 
+    /**
+     * 从 POI 布尔值转换为 Luckysheet 加粗状态.
+     *
+     * @param poiValue POI 中的加粗布尔值
+     * @return 对应的 Luckysheet 加粗状态枚举
+     */
     public static Bold of(boolean poiValue) {
         return TYPES.get(poiValue);
     }

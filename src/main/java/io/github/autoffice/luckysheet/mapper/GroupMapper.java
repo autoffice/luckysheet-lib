@@ -35,6 +35,12 @@ public final class GroupMapper {
     private GroupMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取行列分组信息并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         List<Group> rowGroups = collectRowGroups(sheet);
         if (!rowGroups.isEmpty()) {
@@ -47,6 +53,13 @@ public final class GroupMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 行列分组写入 Excel 工作表.
+     *
+     * @param rowGroups 行分组列表
+     * @param colGroups 列分组列表
+     * @param sheet     目标 POI 工作表
+     */
     public static void mapToExcel(List<Group> rowGroups, List<Group> colGroups, XSSFSheet sheet) {
         if (CollectionUtils.isNotEmpty(rowGroups)) {
             for (Group g : rowGroups) {

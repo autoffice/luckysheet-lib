@@ -35,21 +35,48 @@ import io.github.autoffice.luckysheet.util.NumberUtil;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
+/**
+ * Luckysheet 模型对象工厂.
+ *
+ * <p>集中创建 {@link LuckyFile}、{@link LuckySheet}、{@link CellData} 等模型实例,
+ * 确保对象初始化时具备必要的默认值.</p>
+ */
 public class LuckySheetFactory {
+    /**
+     * 创建空的 LuckyFile 实例.
+     *
+     * @return 新的 LuckyFile 实例
+     */
     public static LuckyFile createLuckyFile() {
         return new LuckyFile();
     }
 
+    /**
+     * 创建空的 LuckyFileInfo 实例.
+     *
+     * @return 新的 LuckyFileInfo 实例
+     */
     public static LuckyFileInfo createLuckyFileInfo() {
         return new LuckyFileInfo();
     }
 
+    /**
+     * 创建 LuckySheet 实例并设置工作表名称.
+     *
+     * @param sheetName 工作表名称
+     * @return 初始化后的 LuckySheet 实例
+     */
     public static LuckySheet createLuckySheet(String sheetName) {
         LuckySheet luckySheet = new LuckySheet();
         luckySheet.setName(sheetName);
         return luckySheet;
     }
 
+    /**
+     * 创建 CellData 实例, 内含初始化的 CellValue 和 CellType.
+     *
+     * @return 初始化后的 CellData 实例
+     */
     public static CellData createCellData() {
         CellData cellData = new CellData();
         CellValue v = new CellValue();
@@ -59,14 +86,29 @@ public class LuckySheetFactory {
         return cellData;
     }
 
+    /**
+     * 创建空的 InlineText 实例.
+     *
+     * @return 新的 InlineText 实例
+     */
     public static InlineText createInlineText() {
         return new InlineText();
     }
 
+    /**
+     * 创建空的 Comment 实例.
+     *
+     * @return 新的 Comment 实例
+     */
     public static Comment createComment() {
         return new Comment();
     }
 
+    /**
+     * 创建 Border 实例, 默认范围类型为 CELL.
+     *
+     * @return 初始化后的 Border 实例
+     */
     public static Border createBorder() {
         Border border = new Border();
         border.setRangeType(BorderRangeType.CELL);
@@ -74,6 +116,13 @@ public class LuckySheetFactory {
         return border;
     }
 
+    /**
+     * 从 POI 边框颜色和样式创建 Border.Style.
+     *
+     * @param borderColor POI 边框颜色
+     * @param borderStyle POI 边框样式
+     * @return Border.Style 实例, 颜色无效时返回 null
+     */
     public static Border.Style createBorderStyle(XSSFColor borderColor, BorderStyle borderStyle) {
         if (borderColor == null) {
             return null;
@@ -98,6 +147,11 @@ public class LuckySheetFactory {
         return style;
     }
 
+    /**
+     * 创建 SheetImage 实例, 内含初始化的 border、crop 和 position.
+     *
+     * @return 初始化后的 SheetImage 实例
+     */
     public static SheetImage createImage() {
         SheetImage sheetImage = new SheetImage();
         sheetImage.setBorder(new ImageBorder());
@@ -106,6 +160,12 @@ public class LuckySheetFactory {
         return sheetImage;
     }
 
+    /**
+     * 判断 Border 是否包含至少一条有效边框样式 (上/右/下/左).
+     *
+     * @param border 待检查的 Border 实例
+     * @return 包含有效样式返回 true, 否则返回 false
+     */
     public static boolean hasBorderStyle(Border border) {
         return border.getValue().getT() != null
                 || border.getValue().getR() != null
@@ -113,6 +173,13 @@ public class LuckySheetFactory {
                 || border.getValue().getL() != null;
     }
 
+    /**
+     * 创建指定行列位置的 Border 实例.
+     *
+     * @param row 行索引
+     * @param col 列索引
+     * @return 初始化后的 Border 实例
+     */
     public static Border createBorder(int row, int col) {
         Border borderTmp = new Border();
         borderTmp.setRangeType(BorderRangeType.CELL);
@@ -123,6 +190,12 @@ public class LuckySheetFactory {
         return borderTmp;
     }
 
+    /**
+     * 从 Luckysheet Border 的 style 和 color 属性创建 Border.Style.
+     *
+     * @param border 源 Border 实例
+     * @return 新的 Border.Style 实例
+     */
     public static Border.Style createBorderStyle(Border border) {
         Border.Style style = new Border.Style();
         style.setStyle(border.getStyle());
@@ -130,6 +203,11 @@ public class LuckySheetFactory {
         return style;
     }
 
+    /**
+     * 创建空的 Frozen 实例.
+     *
+     * @return 新的 Frozen 实例
+     */
     public static Frozen createFrozen() {
         return new Frozen();
     }

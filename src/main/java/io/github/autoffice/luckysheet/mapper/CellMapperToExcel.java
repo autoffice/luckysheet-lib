@@ -48,8 +48,19 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 单元格数据 Luckysheet → Excel (POI) 映射器.
+ *
+ * <p>负责将 {@link CellData} 中的值、样式、公式、批注等信息写入 POI 的 {@link XSSFCell}.</p>
+ */
 @Slf4j
 public class CellMapperToExcel {
+    /**
+     * 将 Luckysheet 单元格数据写入 POI Cell.
+     *
+     * @param cellData Luckysheet 单元格数据
+     * @param cell     目标 POI 单元格
+     */
     public static void mapToCell(CellData cellData, XSSFCell cell) {
         mapCellValue(cellData, cell);
         mapCellStyle(cellData, cell);
@@ -282,6 +293,12 @@ public class CellMapperToExcel {
     }
 
 
+    /**
+     * 将 Luckysheet 水平对齐方式映射到 POI 单元格样式.
+     *
+     * @param cellHorizontalType Luckysheet 水平对齐枚举
+     * @param xssfCellStyle      目标 POI 单元格样式
+     */
     public static void mapHorizontalAlignment(CellHorizontalType cellHorizontalType, XSSFCellStyle xssfCellStyle) {
         if (cellHorizontalType == null) {
             return;
@@ -290,6 +307,12 @@ public class CellMapperToExcel {
         xssfCellStyle.setAlignment(cellHorizontalType.getPoiValue());
     }
 
+    /**
+     * 将 Luckysheet 垂直对齐方式映射到 POI 单元格样式.
+     *
+     * @param cellHorizontalType Luckysheet 垂直对齐枚举
+     * @param xssfCellStyle      目标 POI 单元格样式
+     */
     public static void mapVerticalAlignment(CellVerticalType cellHorizontalType, XSSFCellStyle xssfCellStyle) {
         if (cellHorizontalType == null) {
             return;

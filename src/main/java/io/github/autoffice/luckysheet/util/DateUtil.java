@@ -22,16 +22,27 @@ import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
+/**
+ * 日期格式处理工具类.
+ *
+ * <p>提供 POI 内置日期格式映射和时间戳格式化功能.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateUtil {
 
-    // excel date format 转到 luckysheet date format
+    /** POI 内置日期格式索引到 Luckysheet 日期格式字符串的映射表. */
     public static final HashMap<Short, String> DATE_MAP = new HashMap<Short, String>() {
         {
             put((short) 58, "M\"月\"d\"日\"");
         }
     };
 
+    /**
+     * 将毫秒时间戳转换为 ISO-8601 格式的 JSON 时间字符串.
+     *
+     * @param millis 毫秒时间戳
+     * @return ISO-8601 格式时间字符串 (如 "2025-01-01T00:00:00Z")
+     */
     public static String toJsonTimeString(long millis) {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.ofEpochMilli(millis));
     }

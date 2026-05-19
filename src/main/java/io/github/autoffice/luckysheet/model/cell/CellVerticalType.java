@@ -27,9 +27,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * 单元格内值的垂直对齐方式
+ * 单元格内值的垂直对齐方式.
  *
- * @author hanbd
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
  */
 @AllArgsConstructor
 public enum CellVerticalType {
@@ -55,6 +55,13 @@ public enum CellVerticalType {
     private static final Map<VerticalAlignment, CellVerticalType> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(CellVerticalType::getPoiValue, Function.identity()));
 
+    /**
+     * 从 POI 垂直对齐方式转换为 Luckysheet 垂直对齐类型.
+     * <p>未匹配的对齐方式默认返回 {@link #CENTER}.</p>
+     *
+     * @param verticalAlignment POI 中的垂直对齐方式
+     * @return 对应的 Luckysheet 垂直对齐类型枚举
+     */
     public static CellVerticalType of(VerticalAlignment verticalAlignment) {
         CellVerticalType cellVerticalType = TYPES.get(verticalAlignment);
         return Util.requireNonNullElse(cellVerticalType, CENTER);

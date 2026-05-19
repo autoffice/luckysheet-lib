@@ -111,6 +111,12 @@ public enum BorderStyleType {
     private static final Map<BorderStyle, BorderStyleType> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(BorderStyleType::getPoiValue, Function.identity()));
 
+    /**
+     * 从 POI BorderStyle 转换.
+     *
+     * @param borderStyle POI 中的边框样式
+     * @return 对应的枚举值, 未匹配时默认返回 {@link #THIN}
+     */
     public static BorderStyleType of(BorderStyle borderStyle) {
         BorderStyleType borderStyleType = TYPES.get(borderStyle);
         return Util.requireNonNullElse(borderStyleType, THIN);

@@ -35,6 +35,12 @@ public final class PivotTableMapper {
     private PivotTableMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取数据透视表信息并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         List<XSSFPivotTable> tables = sheet.getPivotTables();
         if (tables == null || tables.isEmpty()) {
@@ -59,6 +65,12 @@ public final class PivotTableMapper {
         luckySheet.setPivotTable(model);
     }
 
+    /**
+     * 将 Luckysheet 数据透视表写入 Excel 工作表.
+     *
+     * @param pivotTable Luckysheet 数据透视表模型
+     * @param sheet      目标 POI 工作表
+     */
     public static void mapToExcel(SheetPivotTable pivotTable, XSSFSheet sheet) {
         if (pivotTable == null) {
             return;

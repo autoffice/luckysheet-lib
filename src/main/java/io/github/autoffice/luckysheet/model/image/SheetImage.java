@@ -18,6 +18,13 @@ package io.github.autoffice.luckysheet.model.image;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Luckysheet 工作表中的图片模型.
+ *
+ * <p>包含图片源数据、定位类型、原始尺寸、位置、裁剪和边框信息.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/image.html">Luckysheet 图片</a>
+ */
 @Data
 public class SheetImage {
     /**

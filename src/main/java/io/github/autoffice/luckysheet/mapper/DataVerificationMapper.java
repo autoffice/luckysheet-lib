@@ -43,6 +43,12 @@ public final class DataVerificationMapper {
     private DataVerificationMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取数据验证规则并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         List<XSSFDataValidation> validations = sheet.getDataValidations();
         if (validations == null || validations.isEmpty()) {
@@ -74,6 +80,12 @@ public final class DataVerificationMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 数据验证规则写入 Excel 工作表.
+     *
+     * @param verifications 数据验证映射 (key 为 "行_列" 格式)
+     * @param sheet         目标 POI 工作表
+     */
     public static void mapToExcel(Map<String, DataVerification> verifications, XSSFSheet sheet) {
         if (MapUtils.isEmpty(verifications)) {
             return;

@@ -41,11 +41,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 工作表 Luckysheet → POI 映射器.
+ *
+ * <p>负责将 {@link LuckySheet} 中的单元格数据、行列尺寸、合并区域、边框、冻结等信息
+ * 写入 POI {@link XSSFSheet}.</p>
+ */
 public class SheetMapperToExcel {
 
+    /** Luckysheet 默认行高 (像素), 当 LuckySheet.defaultRowHeight 为 null 时使用. */
     public static final Short LUCKY_SHEET_DEFAULT_ROW_HEIGHT_IN_PIXEL = 19;
+    /** Luckysheet 默认列宽 (像素), 当 LuckySheet.defaultColWidth 为 null 时使用. */
     public static final Short LUCY_SHEET_DEFAULT_COL_WIDTH_IN_PIXEL = 73;
 
+    /**
+     * 将 Luckysheet 工作表写入 POI 工作表.
+     *
+     * @param luckySheet 源 Luckysheet 工作表
+     * @param sheet      目标 Excel 工作表 (将被原地填充)
+     */
     public static void mapToSheet(LuckySheet luckySheet, XSSFSheet sheet) {
         mapDefaultRowHeight(luckySheet.getDefaultRowHeight(), sheet);
         mapDefaultColumnWidth(luckySheet.getDefaultColWidth(), sheet);

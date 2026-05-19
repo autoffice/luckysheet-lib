@@ -26,6 +26,13 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 图片锚定类型枚举, 定义图片相对于单元格的行为方式.
+ *
+ * <p>对应 Luckysheet 图片对象中的 type 字段, 与 POI {@link ClientAnchor.AnchorType} 互相映射.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#images">Luckysheet 图片文档</a>
+ */
 @AllArgsConstructor
 public enum ImageType {
     /**
@@ -50,6 +57,12 @@ public enum ImageType {
     private static final Map<ClientAnchor.AnchorType, ImageType> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(ImageType::getPoiValue, Function.identity()));
 
+    /**
+     * 从 POI AnchorType 转换.
+     *
+     * @param anchorType POI 中的锚定类型
+     * @return 对应的枚举值, 未匹配时默认返回 {@link #MOVE_AND_RESIZE}
+     */
     public static ImageType of(ClientAnchor.AnchorType anchorType) {
         ImageType imageType = TYPES.get(anchorType);
         return Util.requireNonNullElse(imageType, MOVE_AND_RESIZE);

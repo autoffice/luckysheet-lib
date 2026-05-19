@@ -49,8 +49,19 @@ import java.util.List;
 
 import static io.github.autoffice.luckysheet.util.DateUtil.DATE_MAP;
 
+/**
+ * 单元格数据 Excel (POI) → Luckysheet 映射器.
+ *
+ * <p>负责将 POI 的 {@link XSSFCell} 中的值、样式、公式、批注等信息转换为 {@link CellData}.</p>
+ */
 public class CellMapperToLuckySheet {
 
+    /**
+     * 将 POI Cell 转换为 Luckysheet CellData.
+     *
+     * @param cell     源 POI 单元格
+     * @param cellData 目标 Luckysheet 单元格数据
+     */
     public static void mapToCell(XSSFCell cell, CellData cellData) {
         mapCellValue(cell, cellData);
         mapCellStyle(cell, cellData);

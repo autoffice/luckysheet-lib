@@ -29,9 +29,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
+/**
+ * 图片处理工具类.
+ *
+ * <p>提供图片格式转换、Base64 编解码和 Luckysheet 图片 ID 生成等功能.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public final class ImageUtil {
+    /**
+     * 将图片字节数组转换为 Base64 Data URI 字符串.
+     *
+     * @param data 图片字节数组
+     * @return Base64 Data URI 字符串, 转换失败时返回 null
+     */
     public static String toLuckySheetImage(byte[] data) {
         byte[] png = toPng(data);
         if (png == null) {
@@ -60,6 +71,12 @@ public final class ImageUtil {
         return null;
     }
 
+    /**
+     * 从 SheetImage 中提取图片字节数据.
+     *
+     * @param image Luckysheet 图片对象
+     * @return 图片字节数组, 非 Base64 图片时返回 null
+     */
     public static byte[] getImageData(SheetImage image) {
         if (isBase64Imgae(image)) {
             String[] split = image.getSrc().split(",");
@@ -73,6 +90,11 @@ public final class ImageUtil {
         return StringUtils.contains(image.getSrc(), "base64,");
     }
 
+    /**
+     * 生成 Luckysheet 格式的图片唯一标识符.
+     *
+     * @return 以 "img_" 为前缀的唯一图片 ID
+     */
     public static String getLuckySheetImageId() {
         String time = String.valueOf(System.currentTimeMillis());
         String random = RandomStringUtils.randomAlphabetic(4);

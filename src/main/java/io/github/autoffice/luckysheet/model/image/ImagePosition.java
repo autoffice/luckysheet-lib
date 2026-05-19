@@ -17,6 +17,13 @@ package io.github.autoffice.luckysheet.model.image;
 
 import lombok.Data;
 
+/**
+ * 图片位置信息, 描述图片在工作表中的展示位置和尺寸.
+ *
+ * <p>对应 Luckysheet 图片对象中的 default/cropped 位置属性.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#images">Luckysheet 图片文档</a>
+ */
 @Data
 public class ImagePosition {
     /**

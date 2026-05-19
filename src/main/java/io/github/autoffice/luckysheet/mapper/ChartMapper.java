@@ -55,6 +55,12 @@ public final class ChartMapper {
     private ChartMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取图表信息并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         XSSFDrawing drawing = sheet.getDrawingPatriarch();
         if (drawing == null) {
@@ -86,6 +92,12 @@ public final class ChartMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 图表列表写入 Excel 工作表.
+     *
+     * @param charts Luckysheet 图表列表
+     * @param sheet  目标 POI 工作表
+     */
     public static void mapToExcel(List<SheetChart> charts, XSSFSheet sheet) {
         if (CollectionUtils.isEmpty(charts)) {
             return;

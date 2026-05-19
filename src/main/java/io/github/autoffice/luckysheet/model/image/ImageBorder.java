@@ -17,6 +17,13 @@ package io.github.autoffice.luckysheet.model.image;
 
 import lombok.Data;
 
+/**
+ * 图片边框配置, 包含边框宽度、样式和颜色.
+ *
+ * <p>对应 Luckysheet 图片对象中的 border 属性.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#images">Luckysheet 图片文档</a>
+ */
 @Data
 public class ImageBorder {
 

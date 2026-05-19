@@ -25,6 +25,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 单元格下划线状态.
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
+ */
 @AllArgsConstructor
 public enum Underline {
     /**
@@ -45,6 +50,12 @@ public enum Underline {
     private static final Map<FontUnderline, Underline> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(Underline::getPoiValue, Function.identity()));
 
+    /**
+     * 从 POI {@link FontUnderline} 转换为 Luckysheet 下划线状态.
+     *
+     * @param fontUnderline POI 下划线类型
+     * @return 对应的 Luckysheet 下划线状态, 未匹配时返回 {@link #NORMAL}
+     */
     public static Underline of(FontUnderline fontUnderline) {
         Underline underline = TYPES.get(fontUnderline);
         if (underline == null) {

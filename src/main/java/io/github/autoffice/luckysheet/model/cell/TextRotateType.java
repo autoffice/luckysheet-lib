@@ -65,6 +65,12 @@ public enum TextRotateType {
             .collect(Collectors.toMap(TextRotateType::getPoiValue, Function.identity(),
                     (existing, replacement) -> existing));
 
+    /**
+     * 从 POI 旋转角度值转换为对应的 Luckysheet 文字旋转类型.
+     *
+     * @param rotation POI 中的文字旋转角度
+     * @return 对应的旋转类型, 未匹配时返回 {@link #NONE}
+     */
     public static TextRotateType of(short rotation) {
         TextRotateType textRotateType = TYPES.get(rotation);
         return Util.requireNonNullElse(textRotateType, NONE);

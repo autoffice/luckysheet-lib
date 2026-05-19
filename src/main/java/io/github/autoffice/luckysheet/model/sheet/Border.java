@@ -41,6 +41,9 @@ public class Border {
 
     private List<Range> range;
 
+    /**
+     * 边框值, 包含单元格索引和上下左右四个方向的边框样式.
+     */
     @Data
     public static class Value {
         /**
@@ -69,6 +72,9 @@ public class Border {
         private Style b;
     }
 
+    /**
+     * 边框样式, 包含线型和颜色信息.
+     */
     @Data
     public static class Style {
         /**

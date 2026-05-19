@@ -52,6 +52,12 @@ public final class ConditionFormatMapper {
     private ConditionFormatMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取条件格式并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         SheetConditionalFormatting scf = sheet.getSheetConditionalFormatting();
         int count = scf.getNumConditionalFormattings();
@@ -87,6 +93,12 @@ public final class ConditionFormatMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 条件格式列表写入 Excel 工作表.
+     *
+     * @param saves 条件格式列表
+     * @param sheet 目标 POI 工作表
+     */
     public static void mapToExcel(List<ConditionFormat> saves, XSSFSheet sheet) {
         if (CollectionUtils.isEmpty(saves)) {
             return;

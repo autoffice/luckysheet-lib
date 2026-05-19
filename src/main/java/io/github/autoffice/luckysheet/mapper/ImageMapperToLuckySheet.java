@@ -33,7 +33,18 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * 图片 Excel (POI) → Luckysheet 映射器.
+ *
+ * <p>负责从 POI 工作表中提取图片并转换为 {@link SheetImage} 存入 Luckysheet 模型.</p>
+ */
 public class ImageMapperToLuckySheet {
+    /**
+     * 从 Excel 工作表中提取图片并写入 Luckysheet 模型.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToSheet(XSSFSheet sheet, LuckySheet luckySheet) {
         XSSFDrawing drawingPatriarch = sheet.getDrawingPatriarch();
         if (drawingPatriarch == null) {

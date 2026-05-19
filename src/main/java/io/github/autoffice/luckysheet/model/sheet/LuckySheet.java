@@ -24,6 +24,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Luckysheet 工作表模型, 对应一个 Excel 工作表 (Sheet).
+ *
+ * <p>包含单元格数据、配置信息 (行高列宽、合并、边框等)、图片、图表、条件格式、
+ * 冻结窗格、筛选、数据验证等工作表级别的所有属性.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html">Luckysheet 工作表文档</a>
+ */
 @Data
 public class LuckySheet {
 

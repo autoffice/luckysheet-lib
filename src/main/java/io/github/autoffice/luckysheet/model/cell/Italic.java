@@ -24,6 +24,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 单元格斜体状态.
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
+ */
 @AllArgsConstructor
 public enum Italic {
     /**
@@ -31,7 +36,7 @@ public enum Italic {
      */
     NORMAL(0, false),
     /**
-     * 加粗
+     * 斜体
      */
     ITALIC(1, true);
 
@@ -44,6 +49,12 @@ public enum Italic {
     private static final Map<Boolean, Italic> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(Italic::isPoiValue, Function.identity()));
 
+    /**
+     * 从 POI 布尔值转换为 Luckysheet 斜体状态.
+     *
+     * @param italic POI 中的斜体布尔值
+     * @return 对应的 Luckysheet 斜体状态枚举
+     */
     public static Italic of(boolean italic) {
         return TYPES.get(italic);
     }

@@ -20,6 +20,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * 冻结行列配置, 包含冻结类型和冻结范围.
+ *
  * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#frozen">
  *  冻结行列设置，分为6种类型 </a>
  */
@@ -28,6 +30,9 @@ public class Frozen {
     private FrozenType type;
     private Range range;
 
+    /**
+     * 冻结范围, 指定冻结的焦点行和列.
+     */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

@@ -20,6 +20,13 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Luckysheet 工作簿文件模型, 对应一个完整的 Luckysheet JSON 文件.
+ *
+ * <p>包含文件基本信息 ({@link LuckyFileInfo}) 和多个工作表 ({@link LuckySheet}).</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/">Luckysheet 文档</a>
+ */
 @Data
 public class LuckyFile {
     private LuckyFileInfo info;

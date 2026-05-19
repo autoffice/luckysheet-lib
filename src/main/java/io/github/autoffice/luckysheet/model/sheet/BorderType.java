@@ -18,6 +18,13 @@ package io.github.autoffice.luckysheet.model.sheet;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
+/**
+ * 边框类型枚举, 定义边框应用的范围和方向.
+ *
+ * <p>对应 Luckysheet config.borderInfo 中 borderType 字段的取值.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#config-borderinfo">Luckysheet 边框文档</a>
+ */
 @AllArgsConstructor
 public enum BorderType {
     /**

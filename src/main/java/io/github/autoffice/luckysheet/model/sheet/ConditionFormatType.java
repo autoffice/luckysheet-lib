@@ -18,6 +18,13 @@ package io.github.autoffice.luckysheet.model.sheet;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 
+/**
+ * 条件格式类型枚举, 定义条件格式的展示方式.
+ *
+ * <p>对应 Luckysheet 条件格式配置中的 type 字段.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#luckysheet-conditionformat-save">Luckysheet 条件格式文档</a>
+ */
 @AllArgsConstructor
 public enum ConditionFormatType {
     /**

@@ -27,7 +27,21 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * 工作簿 POI → Luckysheet 映射器.
+ *
+ * <p>负责将 xlsx 文件读取为 POI {@link XSSFWorkbook} 后转换为 {@link LuckyFile},
+ * 包括所有工作表以及工作簿级命名范围.</p>
+ */
 public class WorkbookMapperToLuckySheet {
+    /**
+     * 读取 xlsx 文件并转换为 Luckysheet 文件对象.
+     *
+     * @param src xlsx 文件路径
+     * @return 解析后的 Luckysheet 文件对象
+     * @throws IOException            IO 异常
+     * @throws InvalidFormatException xlsx 文件格式不合法
+     */
     public static LuckyFile mapToLuckyFile(String src) throws IOException, InvalidFormatException {
         LuckyFile luckyFile = LuckySheetFactory.createLuckyFile();
         LuckyFileInfo luckyFileInfo = LuckySheetFactory.createLuckyFileInfo();

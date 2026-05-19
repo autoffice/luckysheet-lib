@@ -29,6 +29,12 @@ public final class ProtectionMapper {
     private ProtectionMapper() {
     }
 
+    /**
+     * 从 Excel 工作表保护信息转换为 Luckysheet 的 {@link Authority}.
+     *
+     * @param sheet      Excel 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         CTWorksheet ctWorksheet = sheet.getCTWorksheet();
         if (ctWorksheet == null || !ctWorksheet.isSetSheetProtection()) {
@@ -68,6 +74,12 @@ public final class ProtectionMapper {
         luckySheet.getConfig().setAuthority(a);
     }
 
+    /**
+     * 将 Luckysheet 的 {@link Authority} 写入 Excel 工作表保护配置.
+     *
+     * @param authority 工作表保护配置, 为 null 或未启用时跳过
+     * @param sheet     目标 Excel 工作表
+     */
     public static void mapToExcel(Authority authority, XSSFSheet sheet) {
         if (authority == null || authority.getSheet() == null || authority.getSheet() != 1) {
             return;

@@ -23,6 +23,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.File;
 
+/**
+ * JSON 序列化/反序列化工具类.
+ *
+ * <p>基于 Jackson ObjectMapper, 配置为忽略 null 值和未知属性.</p>
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class JSONUtil {
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -32,6 +37,14 @@ public final class JSONUtil {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    /**
+     * 将 JSON 文件反序列化为指定类型的对象.
+     *
+     * @param file   JSON 文件
+     * @param entity 目标类型
+     * @param <T>    目标类型泛型
+     * @return 反序列化后的对象
+     */
     public static <T> T asEntity(File file, Class<T> entity) {
         try {
             return mapper.readValue(file, entity);
@@ -40,6 +53,12 @@ public final class JSONUtil {
         }
     }
 
+    /**
+     * 将对象序列化为 JSON 字符串.
+     *
+     * @param entity 待序列化的对象
+     * @return JSON 字符串
+     */
     public static String asJSONString(Object entity) {
         try {
             return mapper.writeValueAsString(entity);

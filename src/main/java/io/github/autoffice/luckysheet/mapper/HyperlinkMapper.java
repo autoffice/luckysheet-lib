@@ -37,6 +37,12 @@ public final class HyperlinkMapper {
     private HyperlinkMapper() {
     }
 
+    /**
+     * 从 Excel 工作表中提取超链接并转换为 Luckysheet 格式.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         List<XSSFHyperlink> hyperlinks = sheet.getHyperlinkList();
         if (hyperlinks == null || hyperlinks.isEmpty()) {
@@ -65,6 +71,12 @@ public final class HyperlinkMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 超链接写入 Excel 工作表.
+     *
+     * @param hyperlinks 超链接映射 (key 为 "行_列" 格式)
+     * @param sheet      目标 POI 工作表
+     */
     public static void mapToExcel(Map<String, Hyperlink> hyperlinks, XSSFSheet sheet) {
         if (MapUtils.isEmpty(hyperlinks)) {
             return;

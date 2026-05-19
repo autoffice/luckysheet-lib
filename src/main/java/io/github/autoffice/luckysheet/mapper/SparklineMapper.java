@@ -44,6 +44,12 @@ public final class SparklineMapper {
     private SparklineMapper() {
     }
 
+    /**
+     * 从 Excel 工作表扩展中提取迷你图信息并写入 Luckysheet 单元格.
+     *
+     * @param sheet      源 POI 工作表
+     * @param luckySheet 目标 Luckysheet 工作表
+     */
     public static void mapToLuckySheet(XSSFSheet sheet, LuckySheet luckySheet) {
         CTWorksheet ctWorksheet = sheet.getCTWorksheet();
         if (ctWorksheet == null || !ctWorksheet.isSetExtLst()) {
@@ -74,6 +80,12 @@ public final class SparklineMapper {
         }
     }
 
+    /**
+     * 将 Luckysheet 单元格中的迷你图信息写入 Excel 工作表扩展.
+     *
+     * @param luckySheet 源 Luckysheet 工作表
+     * @param sheet      目标 POI 工作表
+     */
     public static void mapToExcel(LuckySheet luckySheet, XSSFSheet sheet) {
         if (luckySheet == null || CollectionUtils.isEmpty(luckySheet.getCelldata())) {
             return;

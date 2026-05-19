@@ -24,6 +24,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * 单元格删除线状态.
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/cell.html">Luckysheet 单元格属性</a>
+ */
 @AllArgsConstructor
 public enum Cancelline {
     /**
@@ -31,7 +36,7 @@ public enum Cancelline {
      */
     NORMAL(0, false),
     /**
-     * 加粗
+     * 删除线
      */
     CANCELLINE(1, true);
 
@@ -44,6 +49,12 @@ public enum Cancelline {
     private static final Map<Boolean, Cancelline> TYPES = Arrays.stream(values())
             .collect(Collectors.toMap(Cancelline::isPoiValue, Function.identity()));
 
+    /**
+     * 从 POI 布尔值转换为 Luckysheet 删除线状态.
+     *
+     * @param strikeout POI 中的删除线布尔值
+     * @return 对应的 Luckysheet 删除线状态枚举
+     */
     public static Cancelline of(boolean strikeout) {
         return TYPES.get(strikeout);
     }

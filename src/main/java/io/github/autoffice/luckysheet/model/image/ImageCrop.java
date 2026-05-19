@@ -17,6 +17,13 @@ package io.github.autoffice.luckysheet.model.image;
 
 import lombok.Data;
 
+/**
+ * 图片裁剪配置, 描述图片裁剪后的尺寸和偏移量.
+ *
+ * <p>对应 Luckysheet 图片对象中的 crop 属性.</p>
+ *
+ * @see <a href="https://dream-num.github.io/LuckysheetDocs/zh/guide/sheet.html#images">Luckysheet 图片文档</a>
+ */
 @Data
 public class ImageCrop {
     /**
