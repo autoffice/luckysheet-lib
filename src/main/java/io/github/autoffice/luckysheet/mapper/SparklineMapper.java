@@ -133,9 +133,9 @@ public final class SparklineMapper {
             Element sparklines = (Element) group.getElementsByTagNameNS(NS_X14, "sparklines").item(0);
             Element sparkline = extElement.getOwnerDocument().createElementNS(NS_X14, "x14:sparkline");
             Element f = extElement.getOwnerDocument().createElementNS(NS_XM, "xm:f");
-            f.setTextContent(target.spl.getDataRange());
+            f.appendChild(extElement.getOwnerDocument().createTextNode(target.spl.getDataRange()));
             Element sqref = extElement.getOwnerDocument().createElementNS(NS_XM, "xm:sqref");
-            sqref.setTextContent(new CellReference(target.row, target.col).formatAsString());
+            sqref.appendChild(extElement.getOwnerDocument().createTextNode(new CellReference(target.row, target.col).formatAsString()));
             sparkline.appendChild(f);
             sparkline.appendChild(sqref);
             sparklines.appendChild(sparkline);
@@ -171,7 +171,8 @@ public final class SparklineMapper {
         if (list.getLength() == 0) {
             return null;
         }
-        return list.item(0).getTextContent();
+        Node node = list.item(0).getFirstChild();
+        return node == null ? null : node.getNodeValue();
     }
 
     private static CTExtension findOrCreateExtension(CTExtensionList extLst) {
@@ -187,7 +188,7 @@ public final class SparklineMapper {
         return ext;
     }
 
-    private static final class SparklineTarget {
+    static final class SparklineTarget {
         final int row;
         final int col;
         final Sparkline spl;
